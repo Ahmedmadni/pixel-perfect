@@ -21,10 +21,10 @@ function Field({
   className,
 }: {
   label: string;
-  error?: string;
-  hint?: string;
+  error?: string | undefined;
+  hint?: string | undefined;
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <label className={cn("block", className)}>
