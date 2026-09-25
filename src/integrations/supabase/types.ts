@@ -162,7 +162,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      set_active_vehicle: { Args: { _vehicle_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
