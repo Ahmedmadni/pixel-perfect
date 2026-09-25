@@ -57,7 +57,7 @@ export function NotConnectedState({
   );
 }
 
-export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
+export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: (() => void) | undefined }) {
   return (
     <div role="alert" className="rounded-2xl border border-destructive/30 bg-destructive/5 p-6 text-center">
       <AlertTriangle className="mx-auto size-6 text-destructive" />

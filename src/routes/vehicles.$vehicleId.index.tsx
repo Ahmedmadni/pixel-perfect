@@ -27,8 +27,8 @@ const tabs: { value: Tab; label: string }[] = [
 ];
 
 export const Route = createFileRoute("/vehicles/$vehicleId/")({
-  validateSearch: (s: Record<string, unknown>): { tab?: Tab } => ({
-    tab: tabs.some((t) => t.value === s.tab) ? (s.tab as Tab) : undefined,
+  validateSearch: (s: Record<string, unknown>): { tab?: Tab | undefined } => ({
+    tab: tabs.some((t) => t.value === s["tab"]) ? (s["tab"] as Tab) : undefined,
   }),
   head: () => ({
     meta: [
