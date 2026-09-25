@@ -1,4 +1,6 @@
 import { useForm, type UseFormRegisterReturn } from "react-hook-form";
+import { DEFAULT_SALVAGE_VALUE, DEFAULT_USEFUL_LIFE_YEARS } from "@/features/depreciation/lib/config";
+import { formatCurrency } from "@/lib/format";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -169,7 +171,7 @@ export function VehicleForm({
         <Field label="عداد الشراء (كم)" error={errors.purchase_odometer?.message}>
           <TextInput reg={register("purchase_odometer")} invalid={!!errors.purchase_odometer} inputMode="numeric" dir="ltr" />
         </Field>
-        <Field label="قيمة الشراء (ريال)" error={errors.purchase_price?.message} hint="تُستخدم لحساب جدول الإهلاك (25 سنة، خردة 3,000 ريال)">
+        <Field label="قيمة الشراء (ريال)" error={errors.purchase_price?.message} hint={`تُستخدم لحساب جدول الإهلاك (${DEFAULT_USEFUL_LIFE_YEARS} سنة، قيمة تخريدية ${formatCurrency(DEFAULT_SALVAGE_VALUE)})`}>
           <TextInput reg={register("purchase_price")} invalid={!!errors.purchase_price} inputMode="numeric" dir="ltr" />
         </Field>
         <Field label="العداد الحالي (كم) *" error={errors.current_odometer?.message}>
@@ -178,9 +180,6 @@ export function VehicleForm({
       </Section>
 
       <Section title="إضافي">
-        <Field label="رابط صورة السيارة" error={errors.image_url?.message} hint="رفع الصور مباشرة سيتوفر بعد ربط التخزين" className="sm:col-span-2">
-          <TextInput reg={register("image_url")} invalid={!!errors.image_url} dir="ltr" placeholder="https://" />
-        </Field>
         <Field label="ملاحظات" error={errors.notes?.message} className="sm:col-span-2">
           <textarea {...register("notes")} rows={3} className={inputCls} />
         </Field>

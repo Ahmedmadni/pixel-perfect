@@ -1,34 +1,44 @@
-import { Calculator } from "lucide-react";
+import { Calculator, Info } from "lucide-react";
 import { EmptyState } from "@/components/common/states";
-import { formatDate } from "@/lib/format";
+import { formatCurrency, formatDate } from "@/lib/format";
 import type { Vehicle } from "@/types/vehicle";
-import { buildDepreciationSchedule, SALVAGE_VALUE_SAR, USEFUL_LIFE_YEARS } from "../lib/depreciation";
-
-const sar = (n: number) => `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(n)} ر.س`;
+import {
+  calculateDepreciation,
+  DEFAULT_SALVAGE_VALUE,
+  DEFAULT_USEFUL_LIFE_YEARS,
+  formatElapsed,
+} from "../lib/depreciation";
 
 export function DepreciationSchedule({ vehicle }: { vehicle: Vehicle }) {
-  const s =
-    vehicle.purchase_price !== null && vehicle.purchase_date
-      ? buildDepreciationSchedule(vehicle.purchase_price, vehicle.purchase_date)
-      : null;
+  const r = calculateDepreciation(vehicle.purchase_price, vehicle.purchase_date);
 
-  if (!s)
+  if (r.status === "missing_data")
     return (
       <EmptyState
         icon={Calculator}
         title="أضف قيمة وتاريخ الشراء"
-        description={`يُحسب الإهلاك بالقسط الثابت على ${USEFUL_LIFE_YEARS} سنة بقيمة خردة ${sar(SALVAGE_VALUE_SAR)}. يجب أن تكون قيمة الشراء أكبر من قيمة الخردة.`}
+        description={`يبدأ الإهلاك من تاريخ الشراء بطريقة القسط الثابت على ${DEFAULT_USEFUL_LIFE_YEARS} سنة بقيمة تخريدية ${formatCurrency(DEFAULT_SALVAGE_VALUE)}.`}
       />
     );
 
-  const currentYear = Math.min(Math.floor(s.elapsedYears) + 1, USEFUL_LIFE_YEARS);
+  if (r.status === "not_depreciable")
+    return (
+      <EmptyState
+        icon={Info}
+        title="لا يوجد مبلغ قابل للإهلاك"
+        description="قيمة الشراء أقل من أو تساوي القيمة التخريدية، لذلك لا يوجد مبلغ قابل للإهلاك وفق الافتراضات الحالية."
+      />
+    );
+
+  const s = r.schedule;
+  const currentYear = s.fullyDepreciated ? 0 : Math.min(s.elapsed.years + 1, s.usefulLife);
   const stats: [string, string][] = [
-    ["قيمة الشراء", sar(s.cost)],
-    ["القيمة الدفترية الحالية", sar(s.currentBookValue)],
-    ["مجمع الإهلاك حتى اليوم", sar(s.currentAccumulated)],
-    ["الإهلاك السنوي", sar(s.annual)],
-    ["الإهلاك الشهري", sar(s.monthly)],
-    ["العمر المنقضي", `${s.elapsedYears} من ${USEFUL_LIFE_YEARS} سنة`],
+    ["قيمة الشراء", formatCurrency(s.cost)],
+    ["القيمة الدفترية الحالية", formatCurrency(s.currentBookValue)],
+    ["مجمع الإهلاك حتى اليوم", formatCurrency(s.currentAccumulated)],
+    ["الإهلاك السنوي", formatCurrency(s.annual)],
+    ["الإهلاك الشهري", formatCurrency(s.monthly)],
+    ["العمر المنقضي منذ الشراء", s.fullyDepreciated ? "انتهى العمر الافتراضي" : `${formatElapsed(s.elapsed)} من ${s.usefulLife} سنة`],
   ];
 
   return (
@@ -42,7 +52,7 @@ export function DepreciationSchedule({ vehicle }: { vehicle: Vehicle }) {
         ))}
       </dl>
       <p className="text-xs text-ink-soft">
-        طريقة القسط الثابت · العمر الافتراضي {USEFUL_LIFE_YEARS} سنة · قيمة الخردة {sar(SALVAGE_VALUE_SAR)}
+        القسط الثابت · يبدأ من تاريخ الشراء ({formatDate(vehicle.purchase_date!)}) · العمر الافتراضي {s.usefulLife} سنة · القيمة التخريدية {formatCurrency(s.salvage)} · المبلغ القابل للإهلاك {formatCurrency(s.depreciable)}
       </p>
       <div className="overflow-x-auto rounded-2xl bg-panel ring-1 ring-border">
         <table className="w-full min-w-[520px] text-sm">
@@ -56,13 +66,13 @@ export function DepreciationSchedule({ vehicle }: { vehicle: Vehicle }) {
             </tr>
           </thead>
           <tbody>
-            {s.rows.map((r) => (
-              <tr key={r.year} className={`border-t border-border ${r.year === currentYear ? "bg-brand/5 font-semibold" : ""}`}>
-                <td className="num px-4 py-2.5">{r.year}</td>
-                <td className="px-4 py-2.5">{formatDate(r.periodEnd)}</td>
-                <td className="num px-4 py-2.5">{sar(r.expense)}</td>
-                <td className="num px-4 py-2.5">{sar(r.accumulated)}</td>
-                <td className="num px-4 py-2.5">{sar(r.bookValue)}</td>
+            {s.rows.map((row) => (
+              <tr key={row.year} className={`border-t border-border ${row.year === currentYear ? "bg-brand/5 font-semibold" : ""}`}>
+                <td className="num px-4 py-2.5">{row.year}</td>
+                <td className="px-4 py-2.5">{formatDate(row.periodEnd)}</td>
+                <td className="num px-4 py-2.5">{formatCurrency(row.expense)}</td>
+                <td className="num px-4 py-2.5">{formatCurrency(row.accumulated)}</td>
+                <td className="num px-4 py-2.5">{formatCurrency(row.bookValue)}</td>
               </tr>
             ))}
           </tbody>
