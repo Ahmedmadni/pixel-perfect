@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
 import { ComingSoon } from "@/components/layout/ComingSoon";
 
-export const Route = createFileRoute("/issues")({
+export const Route = createFileRoute("/diagnostics")({
   head: () => ({
     meta: [
       { title: "الأعطال · كمتر" },

@@ -10,27 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DiagnosticsRouteImport } from './routes/diagnostics'
 import { Route as ExpensesRouteImport } from './routes/expenses'
-import { Route as IssuesRouteImport } from './routes/issues'
 import { Route as MaintenanceRouteImport } from './routes/maintenance'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as VehiclesRouteImport } from './routes/vehicles'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DiagnosticsRoute = DiagnosticsRouteImport.update({
+  id: '/diagnostics',
+  path: '/diagnostics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExpensesRoute = ExpensesRouteImport.update({
   id: '/expenses',
   path: '/expenses',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IssuesRoute = IssuesRouteImport.update({
-  id: '/issues',
-  path: '/issues',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaintenanceRoute = MaintenanceRouteImport.update({
@@ -53,85 +52,73 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VehiclesRoute = VehiclesRouteImport.update({
-  id: '/vehicles',
-  path: '/vehicles',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/diagnostics': typeof DiagnosticsRoute
   '/expenses': typeof ExpensesRoute
-  '/issues': typeof IssuesRoute
   '/maintenance': typeof MaintenanceRoute
   '/parts': typeof PartsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
-  '/vehicles': typeof VehiclesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/diagnostics': typeof DiagnosticsRoute
   '/expenses': typeof ExpensesRoute
-  '/issues': typeof IssuesRoute
   '/maintenance': typeof MaintenanceRoute
   '/parts': typeof PartsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
-  '/vehicles': typeof VehiclesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/diagnostics': typeof DiagnosticsRoute
   '/expenses': typeof ExpensesRoute
-  '/issues': typeof IssuesRoute
   '/maintenance': typeof MaintenanceRoute
   '/parts': typeof PartsRoute
   '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
-  '/vehicles': typeof VehiclesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/diagnostics'
     | '/expenses'
-    | '/issues'
     | '/maintenance'
     | '/parts'
     | '/reports'
     | '/settings'
-    | '/vehicles'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/diagnostics'
     | '/expenses'
-    | '/issues'
     | '/maintenance'
     | '/parts'
     | '/reports'
     | '/settings'
-    | '/vehicles'
   id:
     | '__root__'
     | '/'
+    | '/diagnostics'
     | '/expenses'
-    | '/issues'
     | '/maintenance'
     | '/parts'
     | '/reports'
     | '/settings'
-    | '/vehicles'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DiagnosticsRoute: typeof DiagnosticsRoute
   ExpensesRoute: typeof ExpensesRoute
-  IssuesRoute: typeof IssuesRoute
   MaintenanceRoute: typeof MaintenanceRoute
   PartsRoute: typeof PartsRoute
   ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
-  VehiclesRoute: typeof VehiclesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -143,18 +130,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/diagnostics': {
+      id: '/diagnostics'
+      path: '/diagnostics'
+      fullPath: '/diagnostics'
+      preLoaderRoute: typeof DiagnosticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/expenses': {
       id: '/expenses'
       path: '/expenses'
       fullPath: '/expenses'
       preLoaderRoute: typeof ExpensesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/issues': {
-      id: '/issues'
-      path: '/issues'
-      fullPath: '/issues'
-      preLoaderRoute: typeof IssuesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/maintenance': {
@@ -185,25 +172,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/vehicles': {
-      id: '/vehicles'
-      path: '/vehicles'
-      fullPath: '/vehicles'
-      preLoaderRoute: typeof VehiclesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DiagnosticsRoute: DiagnosticsRoute,
   ExpensesRoute: ExpensesRoute,
-  IssuesRoute: IssuesRoute,
   MaintenanceRoute: MaintenanceRoute,
   PartsRoute: PartsRoute,
   ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
-  VehiclesRoute: VehiclesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
