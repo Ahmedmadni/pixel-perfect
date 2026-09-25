@@ -31,6 +31,7 @@ export const vehicleFormSchema = z
       .string()
       .refine((v) => v === "" || new Date(v) <= new Date(), "تاريخ الشراء لا يمكن أن يكون في المستقبل"),
     purchase_odometer: optionalInt("عداد الشراء", 0, 3_000_000),
+    purchase_price: optionalInt("قيمة الشراء", 0, 100_000_000),
     current_odometer: z
       .string()
       .trim()
@@ -67,6 +68,7 @@ export const emptyVehicleForm: VehicleFormValues = {
   plate_number: "",
   purchase_date: "",
   purchase_odometer: "",
+  purchase_price: "",
   current_odometer: "",
   image_url: "",
   notes: "",
@@ -90,6 +92,7 @@ export function toVehicleInput(v: VehicleFormValues): VehicleInput {
     plate_number: orNull(v.plate_number),
     purchase_date: orNull(v.purchase_date),
     purchase_odometer: numOrNull(v.purchase_odometer),
+    purchase_price: numOrNull(v.purchase_price),
     current_odometer: Number(v.current_odometer),
     image_url: orNull(v.image_url),
     notes: orNull(v.notes),
@@ -113,6 +116,7 @@ export function fromVehicle(v: VehicleInput): VehicleFormValues {
     plate_number: s(v.plate_number),
     purchase_date: s(v.purchase_date),
     purchase_odometer: s(v.purchase_odometer),
+    purchase_price: s(v.purchase_price),
     current_odometer: s(v.current_odometer),
     image_url: s(v.image_url),
     notes: s(v.notes),
