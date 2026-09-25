@@ -14,7 +14,149 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      odometer_readings: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          reading: number
+          reading_date: string
+          source: string
+          user_id: string
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          reading: number
+          reading_date?: string
+          source?: string
+          user_id: string
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          reading?: number
+          reading_date?: string
+          source?: string
+          user_id?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "odometer_readings_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          preferred_language: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          preferred_language?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          preferred_language?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          color: string | null
+          created_at: string
+          current_odometer: number
+          engine: string | null
+          fuel_type: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          manufacturer: string | null
+          model: string | null
+          model_year: number | null
+          name: string
+          notes: string | null
+          plate_number: string | null
+          purchase_date: string | null
+          purchase_odometer: number | null
+          purchase_price: number | null
+          transmission: string | null
+          trim: string | null
+          updated_at: string
+          user_id: string
+          vin: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          current_odometer?: number
+          engine?: string | null
+          fuel_type?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          manufacturer?: string | null
+          model?: string | null
+          model_year?: number | null
+          name: string
+          notes?: string | null
+          plate_number?: string | null
+          purchase_date?: string | null
+          purchase_odometer?: number | null
+          purchase_price?: number | null
+          transmission?: string | null
+          trim?: string | null
+          updated_at?: string
+          user_id: string
+          vin?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          current_odometer?: number
+          engine?: string | null
+          fuel_type?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          manufacturer?: string | null
+          model?: string | null
+          model_year?: number | null
+          name?: string
+          notes?: string | null
+          plate_number?: string | null
+          purchase_date?: string | null
+          purchase_odometer?: number | null
+          purchase_price?: number | null
+          transmission?: string | null
+          trim?: string | null
+          updated_at?: string
+          user_id?: string
+          vin?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
