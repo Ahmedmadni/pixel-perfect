@@ -28,7 +28,7 @@ const tabs: { value: Tab; label: string }[] = [
   { value: "documents", label: "المستندات" },
 ];
 
-export const Route = createFileRoute("/vehicles/$vehicleId/")({
+export const Route = createFileRoute("/_authenticated/vehicles/$vehicleId/")({
   validateSearch: (s: Record<string, unknown>): { tab?: Tab | undefined } => ({
     tab: tabs.some((t) => t.value === s["tab"]) ? (s["tab"] as Tab) : undefined,
   }),

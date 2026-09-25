@@ -7,7 +7,7 @@ import { useSaveVehicle, useVehicle } from "@/features/vehicles/hooks/useVehicle
 import { fromVehicle, toVehicleInput } from "@/features/vehicles/schemas/vehicle.schema";
 import { errorMessage } from "@/lib/data-provider";
 
-export const Route = createFileRoute("/vehicles/$vehicleId/edit")({
+export const Route = createFileRoute("/_authenticated/vehicles/$vehicleId/edit")({
   head: () => ({
     meta: [
       { title: "تعديل السيارة · كمتر" },
