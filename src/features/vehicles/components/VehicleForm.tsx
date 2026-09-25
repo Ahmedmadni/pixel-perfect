@@ -169,6 +169,9 @@ export function VehicleForm({
         <Field label="عداد الشراء (كم)" error={errors.purchase_odometer?.message}>
           <TextInput reg={register("purchase_odometer")} invalid={!!errors.purchase_odometer} inputMode="numeric" dir="ltr" />
         </Field>
+        <Field label="قيمة الشراء (ريال)" error={errors.purchase_price?.message} hint="تُستخدم لحساب جدول الإهلاك (25 سنة، خردة 3,000 ريال)">
+          <TextInput reg={register("purchase_price")} invalid={!!errors.purchase_price} inputMode="numeric" dir="ltr" />
+        </Field>
         <Field label="العداد الحالي (كم) *" error={errors.current_odometer?.message}>
           <TextInput reg={register("current_odometer")} invalid={!!errors.current_odometer} inputMode="numeric" dir="ltr" />
         </Field>
