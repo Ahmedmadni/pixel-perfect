@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { getProfile, updateProfile } from "@/features/settings/services/profile.service";
 import { errorMessage } from "@/lib/data-provider";
-import { LoadingState, ErrorState } from "@/components/common/states";
+import { CardsSkeleton, ErrorState } from "@/components/common/states";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
@@ -59,9 +59,9 @@ function SettingsPage() {
         <h2 className="text-base font-semibold">الملف الشخصي</h2>
 
         {profileQuery.isPending ? (
-          <LoadingState label="جاري تحميل الملف الشخصي…" />
+          <CardsSkeleton count={1} />
         ) : profileQuery.isError ? (
-          <ErrorState message={errorMessage(profileQuery.error)} onRetry={() => profileQuery.refetch()} />
+          <ErrorState error={profileQuery.error} onRetry={() => profileQuery.refetch()} />
         ) : (
           <form
             className="mt-5 grid gap-4 sm:grid-cols-2"
