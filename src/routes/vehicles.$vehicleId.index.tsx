@@ -9,16 +9,18 @@ import { secondaryBtn } from "@/components/common/buttons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDeleteVehicle, useVehicle } from "@/features/vehicles/hooks/useVehicles";
 import { fuelOptions, labelOf, transmissionOptions } from "@/features/vehicles/lib/catalog";
+import { DepreciationSchedule } from "@/features/depreciation/components/DepreciationSchedule";
 import { OdometerForm } from "@/features/odometer/components/OdometerForm";
 import { OdometerHistory } from "@/features/odometer/components/OdometerHistory";
 import { errorMessage } from "@/lib/data-provider";
-import { formatDate, formatKm } from "@/lib/format";
+import { formatDate, formatKm, formatNumber } from "@/lib/format";
 import { vehicleTitle, type Vehicle } from "@/types/vehicle";
 
-type Tab = "overview" | "odometer" | "maintenance" | "expenses" | "parts" | "diagnostics" | "documents";
+type Tab = "overview" | "odometer" | "depreciation" | "maintenance" | "expenses" | "parts" | "diagnostics" | "documents";
 const tabs: { value: Tab; label: string }[] = [
   { value: "overview", label: "نظرة عامة" },
   { value: "odometer", label: "العداد" },
+  { value: "depreciation", label: "الإهلاك" },
   { value: "maintenance", label: "الصيانة" },
   { value: "expenses", label: "المصروفات" },
   { value: "parts", label: "قطع الغيار" },
@@ -27,8 +29,8 @@ const tabs: { value: Tab; label: string }[] = [
 ];
 
 export const Route = createFileRoute("/vehicles/$vehicleId/")({
-  validateSearch: (s: Record<string, unknown>): { tab?: Tab } => ({
-    tab: tabs.some((t) => t.value === s.tab) ? (s.tab as Tab) : undefined,
+  validateSearch: (s: Record<string, unknown>): { tab?: Tab | undefined } => ({
+    tab: tabs.some((t) => t.value === s["tab"]) ? (s["tab"] as Tab) : undefined,
   }),
   head: () => ({
     meta: [
@@ -100,12 +102,13 @@ function VehicleDetailPage() {
         ) : (
           <>
             <TabsContent value="overview"><Overview vehicle={q.data} /></TabsContent>
+            <TabsContent value="depreciation"><DepreciationSchedule vehicle={q.data} /></TabsContent>
             <TabsContent value="odometer" className="space-y-4">
               <OdometerForm vehicleId={vehicleId} currentOdometer={q.data.current_odometer} />
               <h3 className="text-sm font-semibold">سجل العداد</h3>
               <OdometerHistory vehicleId={vehicleId} />
             </TabsContent>
-            {tabs.slice(2).map((t) => (
+            {tabs.slice(3).map((t) => (
               <TabsContent key={t.value} value={t.value}>
                 <ComingSoon title={t.label} description={`قسم ${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.`} />
               </TabsContent>
@@ -130,6 +133,7 @@ function Overview({ vehicle: v }: { vehicle: Vehicle }) {
     ["رقم الهيكل", v.vin ?? "—"],
     ["رقم اللوحة", v.plate_number ?? "—"],
     ["تاريخ الشراء", v.purchase_date ? formatDate(v.purchase_date) : "—"],
+    ["قيمة الشراء", v.purchase_price !== null ? `${formatNumber(v.purchase_price)} ر.س` : "—"],
     ["عداد الشراء", v.purchase_odometer !== null ? formatKm(v.purchase_odometer) : "—"],
   ];
   return (

@@ -23,6 +23,7 @@ export interface Vehicle {
   color: string | null;
   purchase_date: string | null;
   purchase_odometer: number | null;
+  purchase_price: number | null;
   current_odometer: number;
   image_url: string | null;
   notes: string | null;

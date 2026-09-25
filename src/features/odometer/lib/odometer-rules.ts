@@ -31,7 +31,7 @@ export function withDeltas<T extends { reading: number; reading_date: string; cr
   );
   const out = sorted.map((r, i) => ({
     ...r,
-    delta: i === 0 ? null : r.reading - sorted[i - 1].reading,
+    delta: i === 0 ? null : r.reading - (sorted[i - 1]?.reading ?? r.reading),
   }));
   return out.reverse();
 }

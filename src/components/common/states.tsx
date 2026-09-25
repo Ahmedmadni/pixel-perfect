@@ -13,9 +13,9 @@ export function EmptyState({
 }: {
   icon?: LucideIcon;
   title: string;
-  description?: string;
+  description?: string | undefined;
   action?: ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("rounded-2xl bg-panel p-8 text-center ring-1 ring-border sm:p-10", className)}>
@@ -34,9 +34,9 @@ export function NotConnectedState({
   description = "سيتم إظهار بياناتك هنا بعد تفعيل الاتصال.",
   compact,
 }: {
-  title?: string;
-  description?: string;
-  compact?: boolean;
+  title?: string | undefined;
+  description?: string | undefined;
+  compact?: boolean | undefined;
 }) {
   return (
     <div
@@ -57,7 +57,7 @@ export function NotConnectedState({
   );
 }
 
-export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
+export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: (() => void) | undefined }) {
   return (
     <div role="alert" className="rounded-2xl border border-destructive/30 bg-destructive/5 p-6 text-center">
       <AlertTriangle className="mx-auto size-6 text-destructive" />
@@ -74,9 +74,9 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
 /** Shows not-connected vs generic error correctly. */
 export function QueryErrorState(props: {
   error: unknown;
-  onRetry?: () => void;
-  notConnectedTitle?: string;
-  notConnectedDescription?: string;
+  onRetry?: (() => void) | undefined;
+  notConnectedTitle?: string | undefined;
+  notConnectedDescription?: string | undefined;
 }) {
   if (isNotConnected(props.error))
     return <NotConnectedState title={props.notConnectedTitle} description={props.notConnectedDescription} />;
