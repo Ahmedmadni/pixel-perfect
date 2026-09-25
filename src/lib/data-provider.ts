@@ -34,8 +34,17 @@ export async function requireUserId(client: SupabaseClient): Promise<string> {
 }
 
 export function toDataError(error: { message: string; code?: string } | null): DataProviderError {
-  if (error?.code === "PGRST116") return new DataProviderError("NOT_FOUND", error.message);
-  return new DataProviderError("UNKNOWN", error?.message);
+  if (import.meta.env.DEV) console.error("[data]", error);
+  const code = error?.code;
+  const msg = error?.message ?? "";
+  if (code === "PGRST116" || code === "P0002" || code === "22P02") return new DataProviderError("NOT_FOUND", msg);
+  if (code === "42501" || msg.includes("row-level security"))
+    return new DataProviderError("VALIDATION_ERROR", "ليس لديك صلاحية لتنفيذ هذه العملية.");
+  if (code === "23505") return new DataProviderError("VALIDATION_ERROR", "هذه البيانات مسجلة مسبقًا.");
+  if (code === "23514") return new DataProviderError("VALIDATION_ERROR", "بعض القيم المدخلة غير صالحة. راجع الحقول وحاول مرة أخرى.");
+  if (code === "PGRST301" || msg.includes("JWT")) return new DataProviderError("NOT_AUTHENTICATED", msg);
+  if (msg.includes("Failed to fetch")) return new DataProviderError("VALIDATION_ERROR", "تعذّر الاتصال بالخادم. تحقق من الإنترنت وحاول مرة أخرى.");
+  return new DataProviderError("UNKNOWN", msg);
 }
 
 export function errorMessage(error: unknown): string {
