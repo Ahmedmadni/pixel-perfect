@@ -8,7 +8,7 @@ import { toVehicleInput } from "@/features/vehicles/schemas/vehicle.schema";
 import { errorMessage } from "@/lib/data-provider";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
-export const Route = createFileRoute("/vehicles/new")({
+export const Route = createFileRoute("/_authenticated/vehicles/new")({
   head: () => ({
     meta: [
       { title: "إضافة سيارة · كمتر" },

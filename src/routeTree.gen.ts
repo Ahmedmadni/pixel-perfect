@@ -10,117 +10,139 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DiagnosticsRouteImport } from './routes/diagnostics'
-import { Route as ExpensesRouteImport } from './routes/expenses'
-import { Route as MaintenanceRouteImport } from './routes/maintenance'
-import { Route as PartsRouteImport } from './routes/parts'
-import { Route as ReportsRouteImport } from './routes/reports'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as VehiclesIndexRouteImport } from './routes/vehicles.index'
-import { Route as VehiclesNewRouteImport } from './routes/vehicles.new'
-import { Route as VehiclesVehicleIdIndexRouteImport } from './routes/vehicles.$vehicleId.index'
-import { Route as VehiclesVehicleIdEditRouteImport } from './routes/vehicles.$vehicleId.edit'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedDiagnosticsRouteImport } from './routes/_authenticated/diagnostics'
+import { Route as AuthenticatedExpensesRouteImport } from './routes/_authenticated/expenses'
+import { Route as AuthenticatedMaintenanceRouteImport } from './routes/_authenticated/maintenance'
+import { Route as AuthenticatedPartsRouteImport } from './routes/_authenticated/parts'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedVehiclesIndexRouteImport } from './routes/_authenticated/vehicles.index'
+import { Route as AuthenticatedVehiclesNewRouteImport } from './routes/_authenticated/vehicles.new'
+import { Route as AuthenticatedVehiclesVehicleIdIndexRouteImport } from './routes/_authenticated/vehicles.$vehicleId.index'
+import { Route as AuthenticatedVehiclesVehicleIdEditRouteImport } from './routes/_authenticated/vehicles.$vehicleId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DiagnosticsRoute = DiagnosticsRouteImport.update({
-  id: '/diagnostics',
-  path: '/diagnostics',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExpensesRoute = ExpensesRouteImport.update({
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDiagnosticsRoute =
+  AuthenticatedDiagnosticsRouteImport.update({
+    id: '/diagnostics',
+    path: '/diagnostics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedExpensesRoute = AuthenticatedExpensesRouteImport.update({
   id: '/expenses',
   path: '/expenses',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const MaintenanceRoute = MaintenanceRouteImport.update({
-  id: '/maintenance',
-  path: '/maintenance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartsRoute = PartsRouteImport.update({
+const AuthenticatedMaintenanceRoute =
+  AuthenticatedMaintenanceRouteImport.update({
+    id: '/maintenance',
+    path: '/maintenance',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPartsRoute = AuthenticatedPartsRouteImport.update({
   id: '/parts',
   path: '/parts',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ReportsRoute = ReportsRouteImport.update({
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const SettingsRoute = SettingsRouteImport.update({
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const VehiclesIndexRoute = VehiclesIndexRouteImport.update({
-  id: '/vehicles/',
-  path: '/vehicles/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VehiclesNewRoute = VehiclesNewRouteImport.update({
-  id: '/vehicles/new',
-  path: '/vehicles/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VehiclesVehicleIdIndexRoute = VehiclesVehicleIdIndexRouteImport.update({
-  id: '/vehicles/$vehicleId/',
-  path: '/vehicles/$vehicleId/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VehiclesVehicleIdEditRoute = VehiclesVehicleIdEditRouteImport.update({
-  id: '/vehicles/$vehicleId/edit',
-  path: '/vehicles/$vehicleId/edit',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedVehiclesIndexRoute =
+  AuthenticatedVehiclesIndexRouteImport.update({
+    id: '/vehicles/',
+    path: '/vehicles/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedVehiclesNewRoute =
+  AuthenticatedVehiclesNewRouteImport.update({
+    id: '/vehicles/new',
+    path: '/vehicles/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedVehiclesVehicleIdIndexRoute =
+  AuthenticatedVehiclesVehicleIdIndexRouteImport.update({
+    id: '/vehicles/$vehicleId/',
+    path: '/vehicles/$vehicleId/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedVehiclesVehicleIdEditRoute =
+  AuthenticatedVehiclesVehicleIdEditRouteImport.update({
+    id: '/vehicles/$vehicleId/edit',
+    path: '/vehicles/$vehicleId/edit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/diagnostics': typeof DiagnosticsRoute
-  '/expenses': typeof ExpensesRoute
-  '/maintenance': typeof MaintenanceRoute
-  '/parts': typeof PartsRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/vehicles/new': typeof VehiclesNewRoute
-  '/vehicles/': typeof VehiclesIndexRoute
-  '/vehicles/$vehicleId/edit': typeof VehiclesVehicleIdEditRoute
-  '/vehicles/$vehicleId/': typeof VehiclesVehicleIdIndexRoute
+  '/auth': typeof AuthRoute
+  '/diagnostics': typeof AuthenticatedDiagnosticsRoute
+  '/expenses': typeof AuthenticatedExpensesRoute
+  '/maintenance': typeof AuthenticatedMaintenanceRoute
+  '/parts': typeof AuthenticatedPartsRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/vehicles/new': typeof AuthenticatedVehiclesNewRoute
+  '/vehicles/': typeof AuthenticatedVehiclesIndexRoute
+  '/vehicles/$vehicleId/edit': typeof AuthenticatedVehiclesVehicleIdEditRoute
+  '/vehicles/$vehicleId/': typeof AuthenticatedVehiclesVehicleIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/diagnostics': typeof DiagnosticsRoute
-  '/expenses': typeof ExpensesRoute
-  '/maintenance': typeof MaintenanceRoute
-  '/parts': typeof PartsRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/vehicles/new': typeof VehiclesNewRoute
-  '/vehicles': typeof VehiclesIndexRoute
-  '/vehicles/$vehicleId/edit': typeof VehiclesVehicleIdEditRoute
-  '/vehicles/$vehicleId': typeof VehiclesVehicleIdIndexRoute
+  '/auth': typeof AuthRoute
+  '/diagnostics': typeof AuthenticatedDiagnosticsRoute
+  '/expenses': typeof AuthenticatedExpensesRoute
+  '/maintenance': typeof AuthenticatedMaintenanceRoute
+  '/parts': typeof AuthenticatedPartsRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/vehicles/new': typeof AuthenticatedVehiclesNewRoute
+  '/vehicles': typeof AuthenticatedVehiclesIndexRoute
+  '/vehicles/$vehicleId/edit': typeof AuthenticatedVehiclesVehicleIdEditRoute
+  '/vehicles/$vehicleId': typeof AuthenticatedVehiclesVehicleIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/diagnostics': typeof DiagnosticsRoute
-  '/expenses': typeof ExpensesRoute
-  '/maintenance': typeof MaintenanceRoute
-  '/parts': typeof PartsRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/vehicles/new': typeof VehiclesNewRoute
-  '/vehicles/': typeof VehiclesIndexRoute
-  '/vehicles/$vehicleId/edit': typeof VehiclesVehicleIdEditRoute
-  '/vehicles/$vehicleId/': typeof VehiclesVehicleIdIndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/diagnostics': typeof AuthenticatedDiagnosticsRoute
+  '/_authenticated/expenses': typeof AuthenticatedExpensesRoute
+  '/_authenticated/maintenance': typeof AuthenticatedMaintenanceRoute
+  '/_authenticated/parts': typeof AuthenticatedPartsRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/vehicles/new': typeof AuthenticatedVehiclesNewRoute
+  '/_authenticated/vehicles/': typeof AuthenticatedVehiclesIndexRoute
+  '/_authenticated/vehicles/$vehicleId/edit': typeof AuthenticatedVehiclesVehicleIdEditRoute
+  '/_authenticated/vehicles/$vehicleId/': typeof AuthenticatedVehiclesVehicleIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/diagnostics'
     | '/expenses'
     | '/maintenance'
@@ -134,6 +156,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/diagnostics'
     | '/expenses'
     | '/maintenance'
@@ -147,30 +170,24 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/diagnostics'
-    | '/expenses'
-    | '/maintenance'
-    | '/parts'
-    | '/reports'
-    | '/settings'
-    | '/vehicles/new'
-    | '/vehicles/'
-    | '/vehicles/$vehicleId/edit'
-    | '/vehicles/$vehicleId/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/diagnostics'
+    | '/_authenticated/expenses'
+    | '/_authenticated/maintenance'
+    | '/_authenticated/parts'
+    | '/_authenticated/reports'
+    | '/_authenticated/settings'
+    | '/_authenticated/vehicles/new'
+    | '/_authenticated/vehicles/'
+    | '/_authenticated/vehicles/$vehicleId/edit'
+    | '/_authenticated/vehicles/$vehicleId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DiagnosticsRoute: typeof DiagnosticsRoute
-  ExpensesRoute: typeof ExpensesRoute
-  MaintenanceRoute: typeof MaintenanceRoute
-  PartsRoute: typeof PartsRoute
-  ReportsRoute: typeof ReportsRoute
-  SettingsRoute: typeof SettingsRoute
-  VehiclesNewRoute: typeof VehiclesNewRoute
-  VehiclesIndexRoute: typeof VehiclesIndexRoute
-  VehiclesVehicleIdEditRoute: typeof VehiclesVehicleIdEditRoute
-  VehiclesVehicleIdIndexRoute: typeof VehiclesVehicleIdIndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -182,91 +199,128 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/diagnostics': {
-      id: '/diagnostics'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/diagnostics': {
+      id: '/_authenticated/diagnostics'
       path: '/diagnostics'
       fullPath: '/diagnostics'
-      preLoaderRoute: typeof DiagnosticsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedDiagnosticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/expenses': {
-      id: '/expenses'
+    '/_authenticated/expenses': {
+      id: '/_authenticated/expenses'
       path: '/expenses'
       fullPath: '/expenses'
-      preLoaderRoute: typeof ExpensesRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedExpensesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/maintenance': {
-      id: '/maintenance'
+    '/_authenticated/maintenance': {
+      id: '/_authenticated/maintenance'
       path: '/maintenance'
       fullPath: '/maintenance'
-      preLoaderRoute: typeof MaintenanceRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedMaintenanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/parts': {
-      id: '/parts'
+    '/_authenticated/parts': {
+      id: '/_authenticated/parts'
       path: '/parts'
       fullPath: '/parts'
-      preLoaderRoute: typeof PartsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedPartsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/reports': {
-      id: '/reports'
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
       path: '/reports'
       fullPath: '/reports'
-      preLoaderRoute: typeof ReportsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/settings': {
-      id: '/settings'
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/vehicles/': {
-      id: '/vehicles/'
+    '/_authenticated/vehicles/': {
+      id: '/_authenticated/vehicles/'
       path: '/vehicles'
       fullPath: '/vehicles/'
-      preLoaderRoute: typeof VehiclesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedVehiclesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/vehicles/new': {
-      id: '/vehicles/new'
+    '/_authenticated/vehicles/new': {
+      id: '/_authenticated/vehicles/new'
       path: '/vehicles/new'
       fullPath: '/vehicles/new'
-      preLoaderRoute: typeof VehiclesNewRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedVehiclesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/vehicles/$vehicleId/': {
-      id: '/vehicles/$vehicleId/'
+    '/_authenticated/vehicles/$vehicleId/': {
+      id: '/_authenticated/vehicles/$vehicleId/'
       path: '/vehicles/$vehicleId'
       fullPath: '/vehicles/$vehicleId/'
-      preLoaderRoute: typeof VehiclesVehicleIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedVehiclesVehicleIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/vehicles/$vehicleId/edit': {
-      id: '/vehicles/$vehicleId/edit'
+    '/_authenticated/vehicles/$vehicleId/edit': {
+      id: '/_authenticated/vehicles/$vehicleId/edit'
       path: '/vehicles/$vehicleId/edit'
       fullPath: '/vehicles/$vehicleId/edit'
-      preLoaderRoute: typeof VehiclesVehicleIdEditRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedVehiclesVehicleIdEditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDiagnosticsRoute: typeof AuthenticatedDiagnosticsRoute
+  AuthenticatedExpensesRoute: typeof AuthenticatedExpensesRoute
+  AuthenticatedMaintenanceRoute: typeof AuthenticatedMaintenanceRoute
+  AuthenticatedPartsRoute: typeof AuthenticatedPartsRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedVehiclesNewRoute: typeof AuthenticatedVehiclesNewRoute
+  AuthenticatedVehiclesIndexRoute: typeof AuthenticatedVehiclesIndexRoute
+  AuthenticatedVehiclesVehicleIdEditRoute: typeof AuthenticatedVehiclesVehicleIdEditRoute
+  AuthenticatedVehiclesVehicleIdIndexRoute: typeof AuthenticatedVehiclesVehicleIdIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDiagnosticsRoute: AuthenticatedDiagnosticsRoute,
+  AuthenticatedExpensesRoute: AuthenticatedExpensesRoute,
+  AuthenticatedMaintenanceRoute: AuthenticatedMaintenanceRoute,
+  AuthenticatedPartsRoute: AuthenticatedPartsRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedVehiclesNewRoute: AuthenticatedVehiclesNewRoute,
+  AuthenticatedVehiclesIndexRoute: AuthenticatedVehiclesIndexRoute,
+  AuthenticatedVehiclesVehicleIdEditRoute:
+    AuthenticatedVehiclesVehicleIdEditRoute,
+  AuthenticatedVehiclesVehicleIdIndexRoute:
+    AuthenticatedVehiclesVehicleIdIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DiagnosticsRoute: DiagnosticsRoute,
-  ExpensesRoute: ExpensesRoute,
-  MaintenanceRoute: MaintenanceRoute,
-  PartsRoute: PartsRoute,
-  ReportsRoute: ReportsRoute,
-  SettingsRoute: SettingsRoute,
-  VehiclesNewRoute: VehiclesNewRoute,
-  VehiclesIndexRoute: VehiclesIndexRoute,
-  VehiclesVehicleIdEditRoute: VehiclesVehicleIdEditRoute,
-  VehiclesVehicleIdIndexRoute: VehiclesVehicleIdIndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
