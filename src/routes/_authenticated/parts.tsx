@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
 import { ComingSoon } from "@/components/layout/ComingSoon";
 
-export const Route = createFileRoute("/parts")({
+export const Route = createFileRoute("/_authenticated/parts")({
   head: () => ({
     meta: [
       { title: "قطع الغيار · كمتر" },

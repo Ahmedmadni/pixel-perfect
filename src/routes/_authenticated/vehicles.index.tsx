@@ -6,7 +6,7 @@ import { primaryBtn } from "@/components/common/buttons";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { VehicleCard } from "@/features/vehicles/components/VehicleCard";
 
-export const Route = createFileRoute("/vehicles/")({
+export const Route = createFileRoute("/_authenticated/vehicles/")({
   head: () => ({
     meta: [
       { title: "سياراتي · كمتر" },
