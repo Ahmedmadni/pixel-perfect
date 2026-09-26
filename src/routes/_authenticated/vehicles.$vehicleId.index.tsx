@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Gauge, Pencil, Trash2 } from "lucide-react";
+import { Gauge, Pencil, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
 import { CardsSkeleton, QueryErrorState, StatusBadge } from "@/components/common/states";
@@ -7,7 +7,8 @@ import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { ComingSoon } from "@/components/layout/ComingSoon";
 import { secondaryBtn } from "@/components/common/buttons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useDeleteVehicle, useVehicle } from "@/features/vehicles/hooks/useVehicles";
+import { useDeleteVehicle, useSetActiveVehicle, useVehicle } from "@/features/vehicles/hooks/useVehicles";
+import { VehicleImageManager } from "@/features/vehicles/components/VehicleImageManager";
 import { fuelOptions, labelOf, transmissionOptions } from "@/features/vehicles/lib/catalog";
 import { DepreciationSchedule } from "@/features/depreciation/components/DepreciationSchedule";
 import { OdometerForm } from "@/features/odometer/components/OdometerForm";
@@ -50,6 +51,7 @@ function VehicleDetailPage() {
   const navigate = useNavigate({ from: Route.fullPath });
   const q = useVehicle(vehicleId);
   const del = useDeleteVehicle();
+  const setActive = useSetActiveVehicle();
 
   const title = q.data ? q.data.name : "تفاصيل السيارة";
 
@@ -60,12 +62,26 @@ function VehicleDetailPage() {
       action={
         q.data ? (
           <div className="flex gap-2">
+            {!q.data.is_active ? (
+              <button
+                className={secondaryBtn}
+                disabled={setActive.isPending}
+                onClick={() =>
+                  setActive.mutate(vehicleId, {
+                    onSuccess: () => { toast.success("أصبحت هذه السيارة النشطة"); q.refetch(); },
+                    onError: (e) => toast.error(errorMessage(e)),
+                  })
+                }
+              >
+                <Star className="size-4" /> <span className="hidden sm:inline">اجعلها السيارة النشطة</span>
+              </button>
+            ) : null}
             <Link to="/vehicles/$vehicleId/edit" params={{ vehicleId }} className={secondaryBtn}>
               <Pencil className="size-4" /> <span className="hidden sm:inline">تعديل</span>
             </Link>
             <ConfirmDialog
               title="حذف السيارة؟"
-              description="سيتم حذف السيارة وجميع قراءات العداد المرتبطة بها نهائيًا."
+              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وجميع قراءات العداد المرتبطة بها نهائيًا، ولا يمكن التراجع."
               confirmLabel="حذف"
               onConfirm={() =>
                 del.mutate(vehicleId, {
@@ -101,7 +117,7 @@ function VehicleDetailPage() {
           <QueryErrorState error={q.error} onRetry={() => q.refetch()} notConnectedDescription="ستظهر بيانات السيارة هنا بعد تفعيل الاتصال." />
         ) : (
           <>
-            <TabsContent value="overview"><Overview vehicle={q.data} /></TabsContent>
+            <TabsContent value="overview" className="space-y-4"><VehicleImageManager vehicle={q.data} /><Overview vehicle={q.data} /></TabsContent>
             <TabsContent value="depreciation"><DepreciationSchedule vehicle={q.data} /></TabsContent>
             <TabsContent value="odometer" className="space-y-4">
               <OdometerForm vehicleId={vehicleId} currentOdometer={q.data.current_odometer} />
