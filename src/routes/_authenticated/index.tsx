@@ -6,10 +6,11 @@ import { primaryBtn } from "@/components/common/buttons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { isNotConnected } from "@/lib/data-provider";
-import { formatKm } from "@/lib/format";
+import { formatCurrency, formatKm } from "@/lib/format";
+import { currentBookValue } from "@/features/depreciation/lib/depreciation";
 import { vehicleTitle } from "@/types/vehicle";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
     meta: [
       { title: "لوحة المتابعة · كمتر" },
@@ -54,6 +55,10 @@ function Dashboard() {
           <p className="text-sm opacity-80" dir="auto">{vehicleTitle(primary)}</p>
           <p className="mt-4 flex items-center gap-2 text-sm opacity-80"><Gauge className="size-4" /> العداد الحالي</p>
           <p className="num mt-1 text-4xl font-semibold sm:text-5xl">{formatKm(primary.current_odometer)}</p>
+          <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+            <div><p className="opacity-80">قيمة الشراء</p><p className="num mt-1 font-semibold">{primary.purchase_price != null ? formatCurrency(primary.purchase_price) : "غير مسجلة"}</p></div>
+            <div><p className="opacity-80">القيمة الدفترية الحالية</p><p className="num mt-1 font-semibold">{(() => { const b = currentBookValue(primary.purchase_price, primary.purchase_date); return b != null ? formatCurrency(b) : "—"; })()}</p></div>
+          </div>
         </Link>
       )}
 
