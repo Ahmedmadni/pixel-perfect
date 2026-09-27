@@ -16,6 +16,7 @@ import { OdometerHistory } from "@/features/odometer/components/OdometerHistory"
 import { MaintenanceWorkspace } from "@/features/maintenance/components/MaintenanceWorkspace";
 import { ExpenseWorkspace } from "@/features/expenses/components/ExpenseWorkspace";
 import { PartsWorkspace } from "@/features/parts/components/PartsWorkspace";
+import { DiagnosticsWorkspace } from "@/features/diagnostics/components/DiagnosticsWorkspace";
 import { errorMessage } from "@/lib/data-provider";
 import { formatDate, formatKm, formatNumber } from "@/lib/format";
 import { vehicleTitle, type Vehicle } from "@/types/vehicle";
@@ -84,7 +85,7 @@ function VehicleDetailPage() {
             </Link>
             <ConfirmDialog
               title="حذف السيارة؟"
-              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وقراءات العداد وسجلات الصيانة والمصروفات وبيانات قطع الغيار المرتبطة بها نهائيًا، ولا يمكن التراجع."
+              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وقراءات العداد وسجلات الصيانة والمصروفات وقطع الغيار وسجل الأعطال المرتبط بها نهائيًا، ولا يمكن التراجع."
               confirmLabel="حذف"
               onConfirm={() =>
                 del.mutate(vehicleId, {
@@ -136,7 +137,10 @@ function VehicleDetailPage() {
             <TabsContent value="parts">
               <PartsWorkspace vehicleId={vehicleId} />
             </TabsContent>
-            {tabs.filter((t) => ["diagnostics", "documents"].includes(t.value)).map((t) => (
+            <TabsContent value="diagnostics">
+              <DiagnosticsWorkspace vehicleId={vehicleId} />
+            </TabsContent>
+            {tabs.filter((t) => ["documents"].includes(t.value)).map((t) => (
               <TabsContent key={t.value} value={t.value}>
                 <ComingSoon title={t.label} description={`قسم ${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.`} />
               </TabsContent>

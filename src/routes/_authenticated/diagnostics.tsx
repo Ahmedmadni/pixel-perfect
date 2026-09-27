@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { DiagnosticsWorkspace } from "@/features/diagnostics/components/DiagnosticsWorkspace";
 
 export const Route = createFileRoute("/_authenticated/diagnostics")({
   head: () => ({
@@ -12,11 +12,8 @@ export const Route = createFileRoute("/_authenticated/diagnostics")({
     ],
   }),
   component: () => (
-    <AppShell title="الأعطال" subtitle="التشخيص">
-      <ComingSoon
-        title="سجل الأعطال"
-        description="ستتمكن من توثيق الأعطال وأكواد OBD ومتابعة حالة الإصلاح."
-      />
+    <AppShell title="الأعطال" subtitle="التشخيص وأكواد OBD وسجل الإصلاح">
+      <DiagnosticsWorkspace />
     </AppShell>
   ),
 });

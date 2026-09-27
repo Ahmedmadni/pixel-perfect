@@ -9,4 +9,5 @@
 - [x] Phase 2a: maintenance schedules, service records, invoice attachments, search/filters, vehicle tab, dashboard upcoming maintenance
 - [x] Phase 2b: unified expenses, receipts, maintenance cost sync, vehicle tab, dashboard monthly totals
 - [x] Phase 2c: parts catalog, suppliers, price history, fitments, installations, expense sync
-- [ ] Phase 2d: diagnostics, reminders, documents
+- [x] Phase 2d: diagnostics, OBD codes, issue timeline, linked parts/maintenance, dashboard alerts
+- [ ] Phase 2e: reminders and documents
