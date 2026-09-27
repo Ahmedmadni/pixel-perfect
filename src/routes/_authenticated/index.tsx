@@ -6,6 +6,7 @@ import { primaryBtn } from "@/components/common/buttons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { UpcomingMaintenanceCard } from "@/features/maintenance/components/UpcomingMaintenanceCard";
+import { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
 import { isNotConnected } from "@/lib/data-provider";
 import { formatCurrency, formatKm } from "@/lib/format";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
@@ -94,18 +95,17 @@ function Dashboard() {
         <QuickAction icon={Plus} label="إضافة سيارة" to="/vehicles/new" />
         <QuickAction icon={Gauge} label="تحديث العداد" to="/vehicles" />
         <QuickAction icon={Wrench} label="تسجيل صيانة" to="/maintenance" />
-        <QuickAction icon={Receipt} label="إضافة مصروف" to="/expenses" soon />
+        <QuickAction icon={Receipt} label="المصروفات" to="/expenses" />
       </div>
 
       {primary ? <div className="mt-8"><UpcomingMaintenanceCard vehicle={primary} /></div> : null}
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        {["المصروفات الشهرية", "التنبيهات"].map((title) => (
-          <div key={title} className="rounded-2xl border border-dashed border-border p-4">
-            <p className="text-sm font-medium">{title}</p>
-            <p className="mt-1 text-xs text-ink-soft">سيتوفر في المرحلة القادمة</p>
-          </div>
-        ))}
+        <MonthlyExpenseCard />
+        <div className="rounded-2xl border border-dashed border-border p-4">
+          <p className="text-sm font-medium">التنبيهات</p>
+          <p className="mt-1 text-xs text-ink-soft">سيتوفر في المرحلة القادمة</p>
+        </div>
       </div>
     </AppShell>
   );

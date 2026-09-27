@@ -53,6 +53,10 @@ function invalidateMaintenance(qc: ReturnType<typeof useQueryClient>, vehicleId?
   if (vehicleId) qc.invalidateQueries({ queryKey: vehicleKeys.detail(vehicleId) });
 }
 
+function invalidateExpenseLedger(qc: ReturnType<typeof useQueryClient>) {
+  qc.invalidateQueries({ queryKey: ["expenses"] });
+}
+
 export function useSaveMaintenanceRecord() {
   const qc = useQueryClient();
   return useMutation({
@@ -60,7 +64,10 @@ export function useSaveMaintenanceRecord() {
       input: RecordInput;
       opts: { id?: string; invoice?: File | null; removeInvoice?: boolean; oldInvoice?: string | null };
     }) => saveMaintenanceRecord(args.input, args.opts),
-    onSuccess: (_id, args) => invalidateMaintenance(qc, args.input.vehicle_id),
+    onSuccess: (_id, args) => {
+      invalidateMaintenance(qc, args.input.vehicle_id);
+      invalidateExpenseLedger(qc);
+    },
   });
 }
 
@@ -68,7 +75,10 @@ export function useDeleteMaintenanceRecord() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (rec: Pick<MaintenanceRecord, "id" | "invoice_url" | "vehicle_id">) => deleteMaintenanceRecord(rec),
-    onSuccess: (_v, rec) => invalidateMaintenance(qc, rec.vehicle_id),
+    onSuccess: (_v, rec) => {
+      invalidateMaintenance(qc, rec.vehicle_id);
+      invalidateExpenseLedger(qc);
+    },
   });
 }
 
