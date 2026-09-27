@@ -144,7 +144,7 @@ export function MaintenanceRecordForm({
           </Field>
           <div className="sm:col-span-2">
             <Field label="ملاحظات">
-              <textarea className={\`\${inputClass} min-h-24\`} value={form.notes ?? ""} onChange={(e) => set("notes", e.target.value || null)} />
+              <textarea className={`${inputClass} min-h-24`} value={form.notes ?? ""} onChange={(e) => set("notes", e.target.value || null)} />
             </Field>
           </div>
           <div className="sm:col-span-2">
