@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
 import { CardsSkeleton, QueryErrorState, StatusBadge } from "@/components/common/states";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
-import { ComingSoon } from "@/components/layout/ComingSoon";
 import { secondaryBtn } from "@/components/common/buttons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDeleteVehicle, useSetActiveVehicle, useVehicle } from "@/features/vehicles/hooks/useVehicles";
@@ -17,6 +16,7 @@ import { MaintenanceWorkspace } from "@/features/maintenance/components/Maintena
 import { ExpenseWorkspace } from "@/features/expenses/components/ExpenseWorkspace";
 import { PartsWorkspace } from "@/features/parts/components/PartsWorkspace";
 import { DiagnosticsWorkspace } from "@/features/diagnostics/components/DiagnosticsWorkspace";
+import { DocumentsWorkspace } from "@/features/documents/components/DocumentsWorkspace";
 import { errorMessage } from "@/lib/data-provider";
 import { formatDate, formatKm, formatNumber } from "@/lib/format";
 import { vehicleTitle, type Vehicle } from "@/types/vehicle";
@@ -85,7 +85,7 @@ function VehicleDetailPage() {
             </Link>
             <ConfirmDialog
               title="حذف السيارة؟"
-              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وقراءات العداد وسجلات الصيانة والمصروفات وقطع الغيار وسجل الأعطال المرتبط بها نهائيًا، ولا يمكن التراجع."
+              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وقراءات العداد وسجلات الصيانة والمصروفات وقطع الغيار والأعطال والمستندات والتذكيرات المرتبطة بها نهائيًا، ولا يمكن التراجع."
               confirmLabel="حذف"
               onConfirm={() =>
                 del.mutate(vehicleId, {
@@ -140,11 +140,9 @@ function VehicleDetailPage() {
             <TabsContent value="diagnostics">
               <DiagnosticsWorkspace vehicleId={vehicleId} />
             </TabsContent>
-            {tabs.filter((t) => ["documents"].includes(t.value)).map((t) => (
-              <TabsContent key={t.value} value={t.value}>
-                <ComingSoon title={t.label} description={`قسم ${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.`} />
-              </TabsContent>
-            ))}
+            <TabsContent value="documents">
+              <DocumentsWorkspace vehicleId={vehicleId} />
+            </TabsContent>
           </>
         )}
       </Tabs>
