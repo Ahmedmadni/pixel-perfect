@@ -11,4 +11,5 @@
 - [x] Phase 2c: parts catalog, suppliers, price history, fitments, installations, expense sync
 - [x] Phase 2d: diagnostics, OBD codes, issue timeline, linked parts/maintenance, dashboard alerts
 - [x] Phase 2e: reminders, document expiry sync, vehicle documents
-- [ ] Phase 3: reports and analytics
+- [x] Phase 3a: operating-cost reports, monthly trends, category/vehicle breakdowns, CSV export
+- [ ] Phase 3b: reliability and maintenance analytics
