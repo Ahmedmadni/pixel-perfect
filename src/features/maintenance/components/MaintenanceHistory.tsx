@@ -75,7 +75,7 @@ export function MaintenanceHistory({
                 })
               }
               trigger={
-                <button type="button" className={\`\${secondaryBtn} text-destructive\`}>
+                <button type="button" className={`${secondaryBtn} text-destructive`}>
                   <Trash2 className="size-4" /> حذف
                 </button>
               }
