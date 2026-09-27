@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { UpcomingMaintenanceCard } from "@/features/maintenance/components/UpcomingMaintenanceCard";
 import { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
+import { DiagnosticAlertCard } from "@/features/diagnostics/components/DiagnosticAlertCard";
 import { isNotConnected } from "@/lib/data-provider";
 import { formatCurrency, formatKm } from "@/lib/format";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
@@ -102,10 +103,7 @@ function Dashboard() {
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <MonthlyExpenseCard />
-        <div className="rounded-2xl border border-dashed border-border p-4">
-          <p className="text-sm font-medium">التنبيهات</p>
-          <p className="mt-1 text-xs text-ink-soft">سيتوفر في المرحلة القادمة</p>
-        </div>
+        {primary ? <DiagnosticAlertCard vehicle={primary} /> : null}
       </div>
     </AppShell>
   );
