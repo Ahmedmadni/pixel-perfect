@@ -24,10 +24,17 @@ export function MaintenanceHistory({
   }
 
   async function openInvoice(path: string) {
+    const tab = window.open("about:blank", "_blank");
+    if (tab) tab.opener = null;
     try {
       const url = await getInvoiceUrl(path);
-      window.open(url, "_blank", "noopener,noreferrer");
+      if (tab) {
+        tab.location.href = url;
+      } else {
+        window.location.assign(url);
+      }
     } catch (err) {
+      tab?.close();
       toast.error(errorMessage(err));
     }
   }
