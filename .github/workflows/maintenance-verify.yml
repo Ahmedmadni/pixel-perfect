@@ -1,9 +1,10 @@
-name: Maintenance branch verification
+name: Maintenance verification
 
 on:
   push:
     branches:
-      - chatgpt/complete-maintenance-phase2
+      - main
+      - "chatgpt/**"
   pull_request:
     branches:
       - main
