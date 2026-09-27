@@ -158,7 +158,7 @@ export function MaintenanceWorkspace({ vehicleId }: { vehicleId?: string }) {
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {rows.map((row) => (
               <MaintenanceStatusCard
-                key={\`\${row.vehicle.id}:\${row.item.id}\`}
+                key={`${row.vehicle.id}:${row.item.id}`}
                 row={row}
                 onLogService={openNewRecord}
                 onEditSchedule={(target) => setScheduleRow(target)}
@@ -183,7 +183,7 @@ export function MaintenanceWorkspace({ vehicleId }: { vehicleId?: string }) {
         onOpenChange={setRecordOpen}
         vehicles={vehiclesQ.data ?? []}
         items={itemsQ.data ?? []}
-        vehicleId={vehicleId ?? (selectedVehicle !== "all" ? selectedVehicle : undefined)}
+        vehicleId={selectedRow?.vehicle.id ?? vehicleId ?? (selectedVehicle !== "all" ? selectedVehicle : undefined)}
         itemId={selectedRow?.item.id}
         record={editRecord}
       />
