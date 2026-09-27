@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { ExpenseWorkspace } from "@/features/expenses/components/ExpenseWorkspace";
 
 export const Route = createFileRoute("/_authenticated/expenses")({
   head: () => ({
@@ -12,11 +12,8 @@ export const Route = createFileRoute("/_authenticated/expenses")({
     ],
   }),
   component: () => (
-    <AppShell title="المصروفات" subtitle="التكاليف">
-      <ComingSoon
-        title="سجل المصروفات"
-        description="ستتمكن من تسجيل الوقود والإصلاحات ومتابعة التكلفة الشهرية لكل سيارة."
-      />
+    <AppShell title="المصروفات" subtitle="التكاليف الشهرية وسجل المصروفات">
+      <ExpenseWorkspace />
     </AppShell>
   ),
 });
