@@ -96,9 +96,22 @@ export async function upsertSchedule(input: { id?: string; vehicle_id: string; m
   const c = requireClient();
   if (input.interval_km != null && input.interval_km <= 0) throw new DataProviderError("VALIDATION_ERROR", "الفترة بالكيلومتر يجب أن تكون أكبر من صفر.");
   if (input.interval_months != null && input.interval_months <= 0) throw new DataProviderError("VALIDATION_ERROR", "الفترة بالأشهر يجب أن تكون أكبر من صفر.");
+  if (input.is_enabled && input.interval_km == null && input.interval_months == null) {
+    throw new DataProviderError("VALIDATION_ERROR", "أدخل فترة بالكيلومتر أو بالأشهر على الأقل.");
+  }
   if (input.id) {
-    const { error } = await c.from("vehicle_maintenance_schedules").update({ interval_km: input.interval_km, interval_months: input.interval_months, is_enabled: input.is_enabled }).eq("id", input.id);
+    const { data, error } = await c
+      .from("vehicle_maintenance_schedules")
+      .update({
+        interval_km: input.interval_km,
+        interval_months: input.interval_months,
+        is_enabled: input.is_enabled,
+      })
+      .eq("id", input.id)
+      .select("id")
+      .maybeSingle();
     if (error) throw toDataError(error);
+    if (!data) throw new DataProviderError("NOT_FOUND");
     return;
   }
   const user_id = await requireUserId(c);
@@ -142,8 +155,9 @@ export async function saveMaintenanceRecord(input: RecordInput, opts: { id?: str
   const user_id = await requireUserId(c);
   let id = opts.id;
   if (id) {
-    const { error } = await c.from("maintenance_records").update(input).eq("id", id);
+    const { data, error } = await c.from("maintenance_records").update(input).eq("id", id).select("id").maybeSingle();
     if (error) throw toDataError(error);
+    if (!data) throw new DataProviderError("NOT_FOUND");
   } else {
     const { data, error } = await c.from("maintenance_records").insert({ ...input, user_id }).select("id").single();
     if (error) throw toDataError(error);
@@ -154,10 +168,17 @@ export async function saveMaintenanceRecord(input: RecordInput, opts: { id?: str
     const path = `${user_id}/${input.vehicle_id}/${id}/${Date.now()}.${ext}`;
     const up = await c.storage.from(INVOICE_BUCKET).upload(path, opts.invoice, { contentType: opts.invoice.type });
     if (up.error) throw new DataProviderError("UNKNOWN", "تم حفظ السجل لكن تعذّر رفع الفاتورة.");
-    await c.from("maintenance_records").update({ invoice_url: path }).eq("id", id);
+    const linked = await c.from("maintenance_records").update({ invoice_url: path }).eq("id", id).select("id").maybeSingle();
+    if (linked.error || !linked.data) {
+      await c.storage.from(INVOICE_BUCKET).remove([path]);
+      if (linked.error) throw toDataError(linked.error);
+      throw new DataProviderError("NOT_FOUND");
+    }
     if (opts.oldInvoice) await c.storage.from(INVOICE_BUCKET).remove([opts.oldInvoice]);
   } else if (opts.removeInvoice && opts.oldInvoice) {
-    await c.from("maintenance_records").update({ invoice_url: null }).eq("id", id);
+    const cleared = await c.from("maintenance_records").update({ invoice_url: null }).eq("id", id).select("id").maybeSingle();
+    if (cleared.error) throw toDataError(cleared.error);
+    if (!cleared.data) throw new DataProviderError("NOT_FOUND");
     await c.storage.from(INVOICE_BUCKET).remove([opts.oldInvoice]);
   }
   return id;
