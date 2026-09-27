@@ -13,7 +13,8 @@ import { fuelOptions, labelOf, transmissionOptions } from "@/features/vehicles/l
 import { DepreciationSchedule } from "@/features/depreciation/components/DepreciationSchedule";
 import { OdometerForm } from "@/features/odometer/components/OdometerForm";
 import { OdometerHistory } from "@/features/odometer/components/OdometerHistory";
-import { MaintenanceWorkspace } from "@/features/maintenance/components/MaintenanceWorkspace";\nimport { ExpenseWorkspace } from "@/features/expenses/components/ExpenseWorkspace";
+import { MaintenanceWorkspace } from "@/features/maintenance/components/MaintenanceWorkspace";
+import { ExpenseWorkspace } from "@/features/expenses/components/ExpenseWorkspace";
 import { errorMessage } from "@/lib/data-provider";
 import { formatDate, formatKm, formatNumber } from "@/lib/format";
 import { vehicleTitle, type Vehicle } from "@/types/vehicle";

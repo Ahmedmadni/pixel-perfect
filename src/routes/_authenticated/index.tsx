@@ -5,7 +5,8 @@ import { EmptyState, NotConnectedState, QueryErrorState } from "@/components/com
 import { primaryBtn } from "@/components/common/buttons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
-import { UpcomingMaintenanceCard } from "@/features/maintenance/components/UpcomingMaintenanceCard";\nimport { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
+import { UpcomingMaintenanceCard } from "@/features/maintenance/components/UpcomingMaintenanceCard";
+import { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
 import { isNotConnected } from "@/lib/data-provider";
 import { formatCurrency, formatKm } from "@/lib/format";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
