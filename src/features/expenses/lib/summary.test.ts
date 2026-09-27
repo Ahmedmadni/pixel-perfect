@@ -16,6 +16,7 @@ function expense(partial: Partial<Expense>): Expense {
     receipt_url: null,
     source: partial.source ?? "manual",
     maintenance_record_id: partial.maintenance_record_id ?? null,
+    part_installation_id: partial.part_installation_id ?? null,
     created_at: "2026-09-10T00:00:00Z",
     category: partial.category ?? { code: "fuel", name_ar: "وقود" },
     vehicle: partial.vehicle ?? { name: "سيارتي" },
@@ -38,6 +39,18 @@ describe("expense summary", () => {
     expect(result.manual).toBe(200);
     expect(result.maintenance).toBe(800);
     expect(result.count).toBe(2);
+  });
+
+  it("counts standalone part costs with other non-maintenance expenses", () => {
+    const result = summarizeExpenses([
+      expense({ id: "1", amount: 200, source: "manual" }),
+      expense({ id: "2", amount: 350, source: "part", category: { code: "parts", name_ar: "قطع غيار" } }),
+      expense({ id: "3", amount: 800, source: "maintenance", category: { code: "maintenance", name_ar: "صيانة" } }),
+    ], "2026-09");
+
+    expect(result.total).toBe(1350);
+    expect(result.manual).toBe(550);
+    expect(result.maintenance).toBe(800);
   });
 
   it("groups category totals from largest to smallest", () => {

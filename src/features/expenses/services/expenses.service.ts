@@ -5,7 +5,7 @@ const MAINTENANCE_RECEIPT_BUCKET = "maintenance-documents";
 const RECEIPT_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 const RECEIPT_MAX = 10 * 1024 * 1024;
 
-export type ExpenseSource = "manual" | "maintenance";
+export type ExpenseSource = "manual" | "maintenance" | "part";
 
 export interface ExpenseCategory {
   id: string;
@@ -27,6 +27,7 @@ export interface Expense {
   receipt_url: string | null;
   source: ExpenseSource;
   maintenance_record_id: string | null;
+  part_installation_id: string | null;
   created_at: string;
   category: { code: string; name_ar: string } | null;
   vehicle?: { name: string } | null;
@@ -169,7 +170,10 @@ export async function saveExpense(
 
 export async function deleteExpense(expense: Pick<Expense, "id" | "receipt_url" | "source">) {
   if (expense.source !== "manual")
-    throw new DataProviderError("VALIDATION_ERROR", "مصروف الصيانة يُدار من سجل الصيانة.");
+    throw new DataProviderError(
+      "VALIDATION_ERROR",
+      expense.source === "maintenance" ? "مصروف الصيانة يُدار من سجل الصيانة." : "مصروف قطعة الغيار يُدار من سجل قطع الغيار.",
+    );
 
   const c = requireClient();
   const { data, error } = await c
@@ -189,7 +193,12 @@ export async function deleteExpense(expense: Pick<Expense, "id" | "receipt_url" 
 export async function getExpenseReceiptUrl(expense: Pick<Expense, "receipt_url" | "source">) {
   if (!expense.receipt_url) throw new DataProviderError("NOT_FOUND");
   const c = requireClient();
-  const bucket = expense.source === "maintenance" ? MAINTENANCE_RECEIPT_BUCKET : EXPENSE_RECEIPT_BUCKET;
+  const bucket =
+    expense.source === "maintenance"
+      ? MAINTENANCE_RECEIPT_BUCKET
+      : expense.source === "part"
+        ? "part-documents"
+        : EXPENSE_RECEIPT_BUCKET;
   const { data, error } = await c.storage.from(bucket).createSignedUrl(expense.receipt_url, 300);
   if (error) throw toDataError(error);
   return data.signedUrl;
