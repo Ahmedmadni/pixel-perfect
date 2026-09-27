@@ -94,7 +94,7 @@ function VehicleDetailPage() {
                 })
               }
               trigger={
-                <button className={\`\${secondaryBtn} text-destructive\`} aria-label="حذف">
+                <button className={`${secondaryBtn} text-destructive`} aria-label="حذف">
                   <Trash2 className="size-4" />
                 </button>
               }
@@ -130,7 +130,7 @@ function VehicleDetailPage() {
             </TabsContent>
             {tabs.filter((t) => ["expenses", "parts", "diagnostics", "documents"].includes(t.value)).map((t) => (
               <TabsContent key={t.value} value={t.value}>
-                <ComingSoon title={t.label} description={\`قسم \${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.\`} />
+                <ComingSoon title={t.label} description={`قسم ${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.`} />
               </TabsContent>
             ))}
           </>
@@ -153,7 +153,7 @@ function Overview({ vehicle: v }: { vehicle: Vehicle }) {
     ["رقم الهيكل", v.vin ?? "—"],
     ["رقم اللوحة", v.plate_number ?? "—"],
     ["تاريخ الشراء", v.purchase_date ? formatDate(v.purchase_date) : "—"],
-    ["قيمة الشراء", v.purchase_price !== null ? \`\${formatNumber(v.purchase_price)} ر.س\` : "—"],
+    ["قيمة الشراء", v.purchase_price !== null ? `${formatNumber(v.purchase_price)} ر.س` : "—"],
     ["عداد الشراء", v.purchase_odometer !== null ? formatKm(v.purchase_odometer) : "—"],
   ];
   return (
