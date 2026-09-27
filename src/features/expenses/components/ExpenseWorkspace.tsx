@@ -4,6 +4,7 @@ import {
   FileText,
   Gauge,
   Pencil,
+  PackageSearch,
   Plus,
   Receipt,
   Search,
@@ -168,6 +169,7 @@ export function ExpenseWorkspace({ vehicleId }: { vehicleId?: string }) {
             <option value="all">كل المصادر</option>
             <option value="manual">مصروف يدوي</option>
             <option value="maintenance">من الصيانة</option>
+            <option value="part">من قطع الغيار</option>
           </select>
 
           <select
@@ -197,8 +199,8 @@ export function ExpenseWorkspace({ vehicleId }: { vehicleId?: string }) {
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="font-semibold">{expense.category?.name_ar ?? "مصروف"}</p>
-                    <StatusBadge tone={expense.source === "maintenance" ? "brand" : "neutral"}>
-                      {expense.source === "maintenance" ? "من الصيانة" : "يدوي"}
+                    <StatusBadge tone={expense.source === "maintenance" ? "brand" : expense.source === "part" ? "success" : "neutral"}>
+                      {expense.source === "maintenance" ? "من الصيانة" : expense.source === "part" ? "من قطع الغيار" : "يدوي"}
                     </StatusBadge>
                     {!vehicleId && expense.vehicle?.name ? (
                       <StatusBadge>{expense.vehicle.name}</StatusBadge>
@@ -251,7 +253,8 @@ export function ExpenseWorkspace({ vehicleId }: { vehicleId?: string }) {
                   </>
                 ) : (
                   <span className="inline-flex items-center gap-1 rounded-xl bg-secondary px-3 py-2 text-xs text-ink-soft">
-                    <Wrench className="size-3.5" /> التعديل من سجل الصيانة
+                    {expense.source === "maintenance" ? <Wrench className="size-3.5" /> : <PackageSearch className="size-3.5" />}
+                    {expense.source === "maintenance" ? "التعديل من سجل الصيانة" : "التعديل من سجل قطع الغيار"}
                   </span>
                 )}
               </div>

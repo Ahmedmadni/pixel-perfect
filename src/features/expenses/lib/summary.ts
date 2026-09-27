@@ -28,7 +28,7 @@ export function summarizeExpenses(expenses: Expense[], month = currentMonthKey()
   return {
     month,
     total: rows.reduce((sum, expense) => sum + expense.amount, 0),
-    manual: rows.filter((expense) => expense.source === "manual").reduce((sum, expense) => sum + expense.amount, 0),
+    manual: rows.filter((expense) => expense.source !== "maintenance").reduce((sum, expense) => sum + expense.amount, 0),
     maintenance: rows.filter((expense) => expense.source === "maintenance").reduce((sum, expense) => sum + expense.amount, 0),
     count: rows.length,
     byCategory: [...categories.values()].sort((a, b) => b.amount - a.amount),
