@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
-import { MaintenanceWorkspace } from "@/features/maintenance/components/MaintenanceWorkspace";
+import { ComingSoon } from "@/components/layout/ComingSoon";
 
 export const Route = createFileRoute("/_authenticated/maintenance")({
   head: () => ({
@@ -12,8 +12,11 @@ export const Route = createFileRoute("/_authenticated/maintenance")({
     ],
   }),
   component: () => (
-    <AppShell title="الصيانة" subtitle="الجدول والسجل والفواتير">
-      <MaintenanceWorkspace />
+    <AppShell title="الصيانة" subtitle="سجل الأعمال">
+      <ComingSoon
+        title="سجل الصيانة"
+        description="ستتمكن من تسجيل أعمال الصيانة وجدولتها حسب الكيلومترات أو التاريخ."
+      />
     </AppShell>
   ),
 });
