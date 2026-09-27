@@ -96,9 +96,22 @@ export async function upsertSchedule(input: { id?: string; vehicle_id: string; m
   const c = requireClient();
   if (input.interval_km != null && input.interval_km <= 0) throw new DataProviderError("VALIDATION_ERROR", "الفترة بالكيلومتر يجب أن تكون أكبر من صفر.");
   if (input.interval_months != null && input.interval_months <= 0) throw new DataProviderError("VALIDATION_ERROR", "الفترة بالأشهر يجب أن تكون أكبر من صفر.");
+  if (input.is_enabled && input.interval_km == null && input.interval_months == null) {
+    throw new DataProviderError("VALIDATION_ERROR", "أدخل فترة بالكيلومتر أو بالأشهر على الأقل.");
+  }
   if (input.id) {
-    const { error } = await c.from("vehicle_maintenance_schedules").update({ interval_km: input.interval_km, interval_months: input.interval_months, is_enabled: input.is_enabled }).eq("id", input.id);
+    const { data, error } = await c
+      .from("vehicle_maintenance_schedules")
+      .update({
+        interval_km: input.interval_km,
+        interval_months: input.interval_months,
+        is_enabled: input.is_enabled,
+      })
+      .eq("id", input.id)
+      .select("id")
+      .maybeSingle();
     if (error) throw toDataError(error);
+    if (!data) throw new DataProviderError("NOT_FOUND");
     return;
   }
   const user_id = await requireUserId(c);
