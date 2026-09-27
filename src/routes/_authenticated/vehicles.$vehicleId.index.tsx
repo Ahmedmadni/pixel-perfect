@@ -13,6 +13,7 @@ import { fuelOptions, labelOf, transmissionOptions } from "@/features/vehicles/l
 import { DepreciationSchedule } from "@/features/depreciation/components/DepreciationSchedule";
 import { OdometerForm } from "@/features/odometer/components/OdometerForm";
 import { OdometerHistory } from "@/features/odometer/components/OdometerHistory";
+import { MaintenanceWorkspace } from "@/features/maintenance/components/MaintenanceWorkspace";
 import { errorMessage } from "@/lib/data-provider";
 import { formatDate, formatKm, formatNumber } from "@/lib/format";
 import { vehicleTitle, type Vehicle } from "@/types/vehicle";
@@ -81,7 +82,7 @@ function VehicleDetailPage() {
             </Link>
             <ConfirmDialog
               title="حذف السيارة؟"
-              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وجميع قراءات العداد المرتبطة بها نهائيًا، ولا يمكن التراجع."
+              description="هل أنت متأكد من حذف هذه السيارة؟ سيتم حذف السيارة وصورتها وقراءات العداد وسجلات الصيانة المرتبطة بها نهائيًا، ولا يمكن التراجع."
               confirmLabel="حذف"
               onConfirm={() =>
                 del.mutate(vehicleId, {
@@ -93,7 +94,7 @@ function VehicleDetailPage() {
                 })
               }
               trigger={
-                <button className={`${secondaryBtn} text-destructive`} aria-label="حذف">
+                <button className={\`\${secondaryBtn} text-destructive\`} aria-label="حذف">
                   <Trash2 className="size-4" />
                 </button>
               }
@@ -124,9 +125,12 @@ function VehicleDetailPage() {
               <h3 className="text-sm font-semibold">سجل العداد</h3>
               <OdometerHistory vehicleId={vehicleId} />
             </TabsContent>
-            {tabs.slice(3).map((t) => (
+            <TabsContent value="maintenance">
+              <MaintenanceWorkspace vehicleId={vehicleId} />
+            </TabsContent>
+            {tabs.filter((t) => ["expenses", "parts", "diagnostics", "documents"].includes(t.value)).map((t) => (
               <TabsContent key={t.value} value={t.value}>
-                <ComingSoon title={t.label} description={`قسم ${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.`} />
+                <ComingSoon title={t.label} description={\`قسم \${t.label} لهذه السيارة سيتوفر في المرحلة القادمة.\`} />
               </TabsContent>
             ))}
           </>
@@ -149,7 +153,7 @@ function Overview({ vehicle: v }: { vehicle: Vehicle }) {
     ["رقم الهيكل", v.vin ?? "—"],
     ["رقم اللوحة", v.plate_number ?? "—"],
     ["تاريخ الشراء", v.purchase_date ? formatDate(v.purchase_date) : "—"],
-    ["قيمة الشراء", v.purchase_price !== null ? `${formatNumber(v.purchase_price)} ر.س` : "—"],
+    ["قيمة الشراء", v.purchase_price !== null ? \`\${formatNumber(v.purchase_price)} ر.س\` : "—"],
     ["عداد الشراء", v.purchase_odometer !== null ? formatKm(v.purchase_odometer) : "—"],
   ];
   return (
