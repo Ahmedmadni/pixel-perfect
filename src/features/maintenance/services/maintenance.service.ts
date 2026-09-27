@@ -142,8 +142,9 @@ export async function saveMaintenanceRecord(input: RecordInput, opts: { id?: str
   const user_id = await requireUserId(c);
   let id = opts.id;
   if (id) {
-    const { error } = await c.from("maintenance_records").update(input).eq("id", id);
+    const { data, error } = await c.from("maintenance_records").update(input).eq("id", id).select("id").maybeSingle();
     if (error) throw toDataError(error);
+    if (!data) throw new DataProviderError("NOT_FOUND");
   } else {
     const { data, error } = await c.from("maintenance_records").insert({ ...input, user_id }).select("id").single();
     if (error) throw toDataError(error);
@@ -154,10 +155,17 @@ export async function saveMaintenanceRecord(input: RecordInput, opts: { id?: str
     const path = `${user_id}/${input.vehicle_id}/${id}/${Date.now()}.${ext}`;
     const up = await c.storage.from(INVOICE_BUCKET).upload(path, opts.invoice, { contentType: opts.invoice.type });
     if (up.error) throw new DataProviderError("UNKNOWN", "تم حفظ السجل لكن تعذّر رفع الفاتورة.");
-    await c.from("maintenance_records").update({ invoice_url: path }).eq("id", id);
+    const linked = await c.from("maintenance_records").update({ invoice_url: path }).eq("id", id).select("id").maybeSingle();
+    if (linked.error || !linked.data) {
+      await c.storage.from(INVOICE_BUCKET).remove([path]);
+      if (linked.error) throw toDataError(linked.error);
+      throw new DataProviderError("NOT_FOUND");
+    }
     if (opts.oldInvoice) await c.storage.from(INVOICE_BUCKET).remove([opts.oldInvoice]);
   } else if (opts.removeInvoice && opts.oldInvoice) {
-    await c.from("maintenance_records").update({ invoice_url: null }).eq("id", id);
+    const cleared = await c.from("maintenance_records").update({ invoice_url: null }).eq("id", id).select("id").maybeSingle();
+    if (cleared.error) throw toDataError(cleared.error);
+    if (!cleared.data) throw new DataProviderError("NOT_FOUND");
     await c.storage.from(INVOICE_BUCKET).remove([opts.oldInvoice]);
   }
   return id;
