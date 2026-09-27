@@ -8,6 +8,7 @@ import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { UpcomingMaintenanceCard } from "@/features/maintenance/components/UpcomingMaintenanceCard";
 import { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
 import { DiagnosticAlertCard } from "@/features/diagnostics/components/DiagnosticAlertCard";
+import { ReminderDashboardCard } from "@/features/reminders/components/ReminderDashboardCard";
 import { isNotConnected } from "@/lib/data-provider";
 import { formatCurrency, formatKm } from "@/lib/format";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
@@ -101,9 +102,10 @@ function Dashboard() {
 
       {primary ? <div className="mt-8"><UpcomingMaintenanceCard vehicle={primary} /></div> : null}
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MonthlyExpenseCard />
         {primary ? <DiagnosticAlertCard vehicle={primary} /> : null}
+        {primary ? <ReminderDashboardCard vehicle={primary} /> : null}
       </div>
     </AppShell>
   );

@@ -10,4 +10,5 @@
 - [x] Phase 2b: unified expenses, receipts, maintenance cost sync, vehicle tab, dashboard monthly totals
 - [x] Phase 2c: parts catalog, suppliers, price history, fitments, installations, expense sync
 - [x] Phase 2d: diagnostics, OBD codes, issue timeline, linked parts/maintenance, dashboard alerts
-- [ ] Phase 2e: reminders and documents
+- [x] Phase 2e: reminders, document expiry sync, vehicle documents
+- [ ] Phase 3: reports and analytics

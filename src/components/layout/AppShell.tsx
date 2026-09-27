@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   BarChart3,
   Settings,
+  Bell,
   User,
   MoreHorizontal,
   type LucideIcon,
@@ -17,7 +18,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { isSupabaseConfigured } from "@/lib/supabase";
 
 type NavItem = {
-  to: "/" | "/vehicles" | "/maintenance" | "/expenses" | "/parts" | "/diagnostics" | "/reports" | "/settings";
+  to: "/" | "/vehicles" | "/maintenance" | "/expenses" | "/parts" | "/diagnostics" | "/reminders" | "/reports" | "/settings";
   label: string;
   icon: LucideIcon;
 };
@@ -29,6 +30,7 @@ const navItems: NavItem[] = [
   { to: "/expenses", label: "المصروفات", icon: Receipt },
   { to: "/parts", label: "قطع الغيار", icon: Cog },
   { to: "/diagnostics", label: "الأعطال", icon: AlertTriangle },
+  { to: "/reminders", label: "التذكيرات", icon: Bell },
   { to: "/reports", label: "التقارير", icon: BarChart3 },
   { to: "/settings", label: "الإعدادات", icon: Settings },
 ];
