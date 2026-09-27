@@ -32,11 +32,11 @@ export function MaintenanceStatusCard({
       <div className="mt-4 grid gap-2 text-xs text-ink-soft sm:grid-cols-2">
         <p className="flex items-center gap-2">
           <Gauge className="size-4 shrink-0" />
-          {e.next_due_odometer != null ? \`التالي عند \${formatKm(e.next_due_odometer)}\` : "لا يوجد حد كيلومترات"}
+          {e.next_due_odometer != null ? `التالي عند ${formatKm(e.next_due_odometer)}` : "لا يوجد حد كيلومترات"}
         </p>
         <p className="flex items-center gap-2">
           <CalendarClock className="size-4 shrink-0" />
-          {e.next_due_date ? \`التالي في \${formatDate(e.next_due_date)}\` : "لا يوجد موعد زمني"}
+          {e.next_due_date ? `التالي في ${formatDate(e.next_due_date)}` : "لا يوجد موعد زمني"}
         </p>
       </div>
 
@@ -51,7 +51,7 @@ export function MaintenanceStatusCard({
       {!compact && schedule?.last_service_date ? (
         <p className="mt-3 text-xs text-ink-soft">
           آخر صيانة: {formatDate(schedule.last_service_date)}
-          {schedule.last_service_odometer != null ? \` · \${formatKm(schedule.last_service_odometer)}\` : ""}
+          {schedule.last_service_odometer != null ? ` · ${formatKm(schedule.last_service_odometer)}` : ""}
         </p>
       ) : null}
 
