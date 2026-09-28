@@ -17,8 +17,8 @@ export function PartForm({
   open:boolean;
   onOpenChange:(open:boolean)=>void;
   vehicles:Vehicle[];
-  vehicleId?:string;
-  part?:Part|null;
+  vehicleId?: string | undefined;
+  part?: Part | null | undefined;
 }){
   const save=useSavePart();
   const [form,setForm]=useState<PartInput>({

@@ -150,7 +150,7 @@ function validateImage(file: File): string | null {
 
 export async function savePart(
   input: PartInput,
-  opts: { id?: string; image?: File | null; removeImage?: boolean; oldImage?: string | null },
+  opts: { id?: string | undefined; image?: File | null | undefined; removeImage?: boolean | undefined; oldImage?: string | null },
 ) {
   const invalid = validatePart(input);
   if (invalid) throw new DataProviderError("VALIDATION_ERROR", invalid);
@@ -286,7 +286,7 @@ function validateDocument(file: File): string | null {
 
 export async function savePartInstallation(
   input: PartInstallationInput,
-  opts: { id?: string; receipt?: File | null; removeReceipt?: boolean; oldReceipt?: string | null },
+  opts: { id?: string | undefined; receipt?: File | null | undefined; removeReceipt?: boolean | undefined; oldReceipt?: string | null },
 ) {
   const bad = validateInstallation(input);
   if (bad) throw new DataProviderError("VALIDATION_ERROR", bad);

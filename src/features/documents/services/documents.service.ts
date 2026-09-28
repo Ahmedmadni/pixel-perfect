@@ -51,7 +51,7 @@ function validateFile(file:File):string|null{
   if(file.size>FILE_MAX)return "حجم الملف يجب ألا يتجاوز 15 ميجابايت.";
   return null;
 }
-export async function saveVehicleDocument(input:VehicleDocumentInput,opts:{id?:string;file?:File|null;removeFile?:boolean;oldFile?:string|null}){
+export async function saveVehicleDocument(input:VehicleDocumentInput,opts:{id?: string | undefined;file?: File | null | undefined;removeFile?: boolean | undefined;oldFile?:string|null}){
   const bad=validateVehicleDocument(input);if(bad)throw new DataProviderError("VALIDATION_ERROR",bad);
   if(opts.file){const fileError=validateFile(opts.file);if(fileError)throw new DataProviderError("VALIDATION_ERROR",fileError);}
   const c=requireClient();const user_id=await requireUserId(c);let id=opts.id;

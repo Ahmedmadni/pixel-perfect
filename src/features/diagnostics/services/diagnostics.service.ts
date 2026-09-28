@@ -118,7 +118,7 @@ function validateFile(file: File): string | null {
 
 export async function saveDiagnosticIssue(
   input: DiagnosticIssueInput,
-  opts: { id?: string; attachment?: File | null; removeAttachment?: boolean; oldAttachment?: string | null },
+  opts: { id?: string | undefined; attachment?: File | null | undefined; removeAttachment?: boolean | undefined; oldAttachment?: string | null },
 ) {
   const invalid = validateIssue(input);
   if (invalid) throw new DataProviderError("VALIDATION_ERROR", invalid);

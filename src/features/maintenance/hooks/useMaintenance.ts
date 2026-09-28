@@ -62,7 +62,7 @@ export function useSaveMaintenanceRecord() {
   return useMutation({
     mutationFn: (args: {
       input: RecordInput;
-      opts: { id?: string; invoice?: File | null; removeInvoice?: boolean; oldInvoice?: string | null };
+      opts: { id?: string | undefined; invoice?: File | null | undefined; removeInvoice?: boolean | undefined; oldInvoice?: string | null };
     }) => saveMaintenanceRecord(args.input, args.opts),
     onSuccess: (_id, args) => {
       invalidateMaintenance(qc, args.input.vehicle_id);
