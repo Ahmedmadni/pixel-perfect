@@ -18,7 +18,7 @@ export function SupplierManager({open,onOpenChange,suppliers}:{open:boolean;onOp
   const reset=()=>{setEditing(undefined);setForm(empty);};
   return <Dialog open={open} onOpenChange={onOpenChange}><DialogContent dir="rtl" className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
     <DialogHeader className="text-right"><DialogTitle>الموردون والمتاجر</DialogTitle><DialogDescription>احفظ بيانات المورد مرة واحدة ثم استخدمه في سجل الأسعار وعمليات التركيب.</DialogDescription></DialogHeader>
-    <form className="grid gap-3 rounded-2xl bg-secondary/50 p-4 sm:grid-cols-2" onSubmit={e=>{e.preventDefault();save.mutate({input:form,id:editing},{onSuccess:()=>{toast.success(editing?"تم تحديث المورد":"تمت إضافة المورد");reset();},onError:err=>toast.error(errorMessage(err))});}}>
+    <form className="grid gap-3 rounded-2xl bg-secondary/50 p-4 sm:grid-cols-2" onSubmit={e=>{e.preventDefault();save.mutate({input:form,...(editing?{id:editing}:{})},{onSuccess:()=>{toast.success(editing?"تم تحديث المورد":"تمت إضافة المورد");reset();},onError:err=>toast.error(errorMessage(err))});}}>
       <input className={inputClass} placeholder="اسم المورد *" value={form.name} onChange={e=>setForm(p=>({...p,name:e.target.value}))}/>
       <input className={inputClass} placeholder="الهاتف" value={form.phone??""} onChange={e=>setForm(p=>({...p,phone:e.target.value||null}))}/>
       <input dir="ltr" className={inputClass} placeholder="https://..." value={form.website??""} onChange={e=>setForm(p=>({...p,website:e.target.value||null}))}/>
