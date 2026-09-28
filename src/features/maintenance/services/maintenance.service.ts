@@ -92,7 +92,7 @@ export async function getVehicleSchedules(vehicleId?: string): Promise<Schedule[
   return (data ?? []) as unknown as Schedule[];
 }
 
-export async function upsertSchedule(input: { id?: string; vehicle_id: string; maintenance_item_id: string; interval_km: number | null; interval_months: number | null; is_enabled: boolean }) {
+export async function upsertSchedule(input: { id?: string | undefined; vehicle_id: string; maintenance_item_id: string; interval_km: number | null; interval_months: number | null; is_enabled: boolean }) {
   const c = requireClient();
   if (input.interval_km != null && input.interval_km <= 0) throw new DataProviderError("VALIDATION_ERROR", "الفترة بالكيلومتر يجب أن تكون أكبر من صفر.");
   if (input.interval_months != null && input.interval_months <= 0) throw new DataProviderError("VALIDATION_ERROR", "الفترة بالأشهر يجب أن تكون أكبر من صفر.");
@@ -144,7 +144,7 @@ export function validateRecord(r: RecordInput): string | null {
   return null;
 }
 
-export async function saveMaintenanceRecord(input: RecordInput, opts: { id?: string; invoice?: File | null; removeInvoice?: boolean; oldInvoice?: string | null }) {
+export async function saveMaintenanceRecord(input: RecordInput, opts: { id?: string | undefined; invoice?: File | null | undefined; removeInvoice?: boolean | undefined; oldInvoice?: string | null }) {
   const invalid = validateRecord(input);
   if (invalid) throw new DataProviderError("VALIDATION_ERROR", invalid);
   if (opts.invoice) {

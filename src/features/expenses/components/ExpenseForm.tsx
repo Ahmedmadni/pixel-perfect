@@ -27,8 +27,8 @@ export function ExpenseForm({
   onOpenChange: (open: boolean) => void;
   vehicles: Vehicle[];
   categories: ExpenseCategory[];
-  vehicleId?: string;
-  expense?: Expense | null;
+  vehicleId?: string | undefined;
+  expense?: Expense | null | undefined;
 }) {
   const save = useSaveExpense();
   const manualCategories = useMemo(

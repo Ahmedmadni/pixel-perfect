@@ -41,7 +41,7 @@ export function useSaveExpense() {
   return useMutation({
     mutationFn: (args: {
       input: ExpenseInput;
-      opts: { id?: string; receipt?: File | null; removeReceipt?: boolean; oldReceipt?: string | null };
+      opts: { id?: string | undefined; receipt?: File | null | undefined; removeReceipt?: boolean | undefined; oldReceipt?: string | null };
     }) => saveExpense(args.input, args.opts),
     onSuccess: () => invalidateExpenses(qc),
   });

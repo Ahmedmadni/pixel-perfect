@@ -95,7 +95,7 @@ export function localIsoDate(date = new Date()): string {
 
 export async function saveExpense(
   input: ExpenseInput,
-  opts: { id?: string; receipt?: File | null; removeReceipt?: boolean; oldReceipt?: string | null },
+  opts: { id?: string | undefined; receipt?: File | null | undefined; removeReceipt?: boolean | undefined; oldReceipt?: string | null },
 ) {
   const invalid = validateExpense(input);
   if (invalid) throw new DataProviderError("VALIDATION_ERROR", invalid);

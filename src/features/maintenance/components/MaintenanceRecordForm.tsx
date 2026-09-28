@@ -24,9 +24,9 @@ export function MaintenanceRecordForm({
   onOpenChange: (open: boolean) => void;
   vehicles: Vehicle[];
   items: MaintenanceItem[];
-  vehicleId?: string;
-  itemId?: string;
-  record?: MaintenanceRecord | null;
+  vehicleId?: string | undefined;
+  itemId?: string | undefined;
+  record?: MaintenanceRecord | null | undefined;
 }) {
   const save = useSaveMaintenanceRecord();
   const firstVehicle = vehicleId ?? record?.vehicle_id ?? vehicles[0]?.id ?? "";

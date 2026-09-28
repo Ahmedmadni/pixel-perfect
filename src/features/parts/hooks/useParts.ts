@@ -46,7 +46,7 @@ function invalidateParts(qc: ReturnType<typeof useQueryClient>) {
 export function useSavePart() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (args: { input: PartInput; opts: { id?: string; image?: File | null; removeImage?: boolean; oldImage?: string | null } }) =>
+    mutationFn: (args: { input: PartInput; opts: { id?: string | undefined; image?: File | null | undefined; removeImage?: boolean | undefined; oldImage?: string | null } }) =>
       savePart(args.input, args.opts),
     onSuccess: () => invalidateParts(qc),
   });
@@ -89,7 +89,7 @@ export function useDeletePartPrice() {
 export function useSavePartInstallation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (args: { input: PartInstallationInput; opts: { id?: string; receipt?: File | null; removeReceipt?: boolean; oldReceipt?: string | null } }) =>
+    mutationFn: (args: { input: PartInstallationInput; opts: { id?: string | undefined; receipt?: File | null | undefined; removeReceipt?: boolean | undefined; oldReceipt?: string | null } }) =>
       savePartInstallation(args.input, args.opts),
     onSuccess: () => invalidateParts(qc),
   });
