@@ -14,7 +14,7 @@ import type { DiagnosticIssue, DiagnosticIssueInput, DiagnosticSeverity, Diagnos
 const inputClass="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand/30";
 const today=()=>new Date().toLocaleDateString("en-CA");
 
-export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanceRecords,vehicleId,issue}:{open:boolean;onOpenChange:(v:boolean)=>void;vehicles:Vehicle[];parts:Part[];maintenanceRecords:MaintenanceRecord[];vehicleId?:string;issue?:DiagnosticIssue|null}){
+export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanceRecords,vehicleId,issue}:{open:boolean;onOpenChange:(v:boolean)=>void;vehicles:Vehicle[];parts:Part[];maintenanceRecords:MaintenanceRecord[];vehicleId?: string | undefined;issue?:DiagnosticIssue|null}){
   const save=useSaveDiagnosticIssue();
   const [codes,setCodes]=useState("");
   const [attachment,setAttachment]=useState<File|null>(null);

@@ -22,7 +22,7 @@ function invalidate(qc:ReturnType<typeof useQueryClient>){qc.invalidateQueries({
 export function useSaveDiagnosticIssue(){
   const qc=useQueryClient();
   return useMutation({
-    mutationFn:(args:{input:DiagnosticIssueInput;opts:{id?:string;attachment?:File|null;removeAttachment?:boolean;oldAttachment?:string|null}})=>saveDiagnosticIssue(args.input,args.opts),
+    mutationFn:(args:{input:DiagnosticIssueInput;opts:{id?: string | undefined;attachment?: File | null | undefined;removeAttachment?: boolean | undefined;oldAttachment?:string|null}})=>saveDiagnosticIssue(args.input,args.opts),
     onSuccess:()=>invalidate(qc),
   });
 }
