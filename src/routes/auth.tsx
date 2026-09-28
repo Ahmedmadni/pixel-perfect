@@ -66,6 +66,8 @@ function AuthPage() {
               ? "هذا البريد مسجل مسبقاً. جرّب تسجيل الدخول."
               : msg.includes("weak") || msg.includes("easy to guess")
                 ? "كلمة المرور ضعيفة أو شائعة. اختر كلمة أقوى تجمع أحرفاً وأرقاماً ورموزاً."
+                : msg.includes("not allowed") || msg.includes("cannot receive email")
+                  ? "هذا البريد الإلكتروني غير مقبول. استخدم بريداً حقيقياً يمكنه استقبال الرسائل."
                 : msg.includes("not confirmed") || msg.includes("Email not confirmed")
                   ? "لم يتم تأكيد بريدك بعد. افتح رابط التأكيد في بريدك ثم سجّل الدخول."
                   : "تعذّر إتمام العملية. حاول مرة أخرى.",
