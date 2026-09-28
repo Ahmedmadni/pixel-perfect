@@ -12,7 +12,7 @@ import type { Part, PartInstallationInput, Supplier } from "../services/parts.se
 const inputClass="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand/30";
 const today=()=>new Date().toLocaleDateString("en-CA");
 
-export function PartInstallationForm({open,onOpenChange,part,vehicles,suppliers,vehicleId}:{open:boolean;onOpenChange:(v:boolean)=>void;part:Part|null;vehicles:Vehicle[];suppliers:Supplier[];vehicleId?:string}){
+export function PartInstallationForm({open,onOpenChange,part,vehicles,suppliers,vehicleId}:{open:boolean;onOpenChange:(v:boolean)=>void;part:Part|null;vehicles:Vehicle[];suppliers:Supplier[];vehicleId?: string | undefined}){
   const save=useSavePartInstallation();const recordsQ=useMaintenanceRecords();
   const defaultVehicle=vehicleId??part?.fitments[0]?.vehicle_id??vehicles[0]?.id??"";
   const latest=part?.prices.slice().sort((a,b)=>b.observed_date.localeCompare(a.observed_date))[0];
