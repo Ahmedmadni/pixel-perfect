@@ -74,7 +74,7 @@ export function ReminderForm({
           onSubmit={(event) => {
             event.preventDefault();
             save.mutate(
-              { input: form, id: reminder?.id },
+              { input: form, ...(reminder?.id ? { id: reminder.id } : {}) },
               {
                 onSuccess: () => {
                   toast.success("تم حفظ التذكير");
