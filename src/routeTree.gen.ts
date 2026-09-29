@@ -19,6 +19,7 @@ import { Route as AuthenticatedPartsRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSymptomsRouteImport } from './routes/_authenticated/symptoms'
 import { Route as AuthenticatedVehiclesIndexRouteImport } from './routes/_authenticated/vehicles.index'
 import { Route as AuthenticatedVehiclesNewRouteImport } from './routes/_authenticated/vehicles.new'
 import { Route as AuthenticatedVehiclesVehicleIdIndexRouteImport } from './routes/_authenticated/vehicles.$vehicleId.index'
@@ -75,6 +76,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSymptomsRoute = AuthenticatedSymptomsRouteImport.update({
+  id: '/symptoms',
+  path: '/symptoms',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedVehiclesIndexRoute =
   AuthenticatedVehiclesIndexRouteImport.update({
     id: '/vehicles/',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/reminders': typeof AuthenticatedRemindersRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/symptoms': typeof AuthenticatedSymptomsRoute
   '/vehicles/new': typeof AuthenticatedVehiclesNewRoute
   '/vehicles/': typeof AuthenticatedVehiclesIndexRoute
   '/vehicles/$vehicleId/edit': typeof AuthenticatedVehiclesVehicleIdEditRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/reminders': typeof AuthenticatedRemindersRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/symptoms': typeof AuthenticatedSymptomsRoute
   '/': typeof AuthenticatedIndexRoute
   '/vehicles/new': typeof AuthenticatedVehiclesNewRoute
   '/vehicles': typeof AuthenticatedVehiclesIndexRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/symptoms': typeof AuthenticatedSymptomsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/vehicles/new': typeof AuthenticatedVehiclesNewRoute
   '/_authenticated/vehicles/': typeof AuthenticatedVehiclesIndexRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/reports'
     | '/settings'
+    | '/symptoms'
     | '/vehicles/new'
     | '/vehicles/'
     | '/vehicles/$vehicleId/edit'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/reports'
     | '/settings'
+    | '/symptoms'
     | '/'
     | '/vehicles/new'
     | '/vehicles'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reminders'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
+    | '/_authenticated/symptoms'
     | '/_authenticated/'
     | '/_authenticated/vehicles/new'
     | '/_authenticated/vehicles/'
@@ -273,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/symptoms': {
+      id: '/_authenticated/symptoms'
+      path: '/symptoms'
+      fullPath: '/symptoms'
+      preLoaderRoute: typeof AuthenticatedSymptomsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vehicles/': {
       id: '/_authenticated/vehicles/'
       path: '/vehicles'
@@ -312,6 +331,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedSymptomsRoute: typeof AuthenticatedSymptomsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedVehiclesNewRoute: typeof AuthenticatedVehiclesNewRoute
   AuthenticatedVehiclesIndexRoute: typeof AuthenticatedVehiclesIndexRoute
@@ -327,6 +347,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedSymptomsRoute: AuthenticatedSymptomsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedVehiclesNewRoute: AuthenticatedVehiclesNewRoute,
   AuthenticatedVehiclesIndexRoute: AuthenticatedVehiclesIndexRoute,
