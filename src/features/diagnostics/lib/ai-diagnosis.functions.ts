@@ -22,7 +22,7 @@ export const diagnoseSymptoms = createServerFn({ method: "POST" })
     const [v, m, d] = await Promise.all([
       sb.from("vehicles").select("name,manufacturer,model,model_year,engine,fuel_type,transmission,current_odometer,purchase_date").eq("id", data.vehicleId).maybeSingle(),
       sb.from("maintenance_records").select("service_date,odometer,notes,item:maintenance_items(name_ar)").eq("vehicle_id", data.vehicleId).order("service_date", { ascending: false }).limit(30),
-      sb.from("diagnostic_issues").select("title,symptoms,obd_codes,status,first_detected_date,confirmed_cause,resolution").eq("vehicle_id", data.vehicleId).order("first_detected_date", { ascending: false }).limit(15),
+      (sb as unknown as { from: (t: string) => any }).from("diagnostic_issues").select("title,symptoms,obd_codes,status,first_detected_date,confirmed_cause,resolution").eq("vehicle_id", data.vehicleId).order("first_detected_date", { ascending: false }).limit(15),
     ]);
     if (v.error || !v.data) throw new Error("السيارة غير موجودة أو لا تملك صلاحية عليها.");
 
@@ -31,7 +31,7 @@ export const diagnoseSymptoms = createServerFn({ method: "POST" })
 {"summary":string,"urgency":"low"|"medium"|"high"|"critical","safe_to_drive":boolean,"causes":[{"cause":string,"likelihood":"high"|"medium"|"low","reasoning":string}],"steps":[{"step":string,"details":string}],"history_notes":[string],"disclaimer":string}
 من 2 إلى 5 أسباب مرتبة حسب الاحتمال، ومن 3 إلى 6 خطوات. في history_notes اذكر ما يربط الأعراض بالسجل (صيانة متأخرة، عطل سابق عاد...). لا تخترع سجلات غير موجودة.`;
 
-    const key = process.env.LOVABLE_API_KEY;
+    const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("خدمة الذكاء الاصطناعي غير مهيأة.");
     const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
       method: "POST",
