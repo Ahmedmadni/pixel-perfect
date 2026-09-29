@@ -14,6 +14,7 @@ import { DIAGNOSTIC_SEVERITY_LABELS, DIAGNOSTIC_STATUS_LABELS, sortDiagnostics, 
 import { getDiagnosticDocumentUrl, type DiagnosticIssue, type DiagnosticSeverity, type DiagnosticStatus } from "../services/diagnostics.service";
 import { DiagnosticEventForm } from "./DiagnosticEventForm";
 import { DiagnosticIssueForm } from "./DiagnosticIssueForm";
+import { AiSymptomAssistant } from "./AiSymptomAssistant";
 
 const statusTone:Record<DiagnosticStatus,"danger"|"warning"|"success"|"brand">={open:"warning",monitoring:"brand",resolved:"success",returned:"danger"};
 const severityTone:Record<DiagnosticSeverity,"neutral"|"warning"|"danger">={low:"neutral",medium:"neutral",high:"warning",critical:"danger"};
@@ -45,6 +46,7 @@ export function DiagnosticsWorkspace({vehicleId}:{vehicleId?:string}){
   if(!(vehiclesQ.data??[]).length)return <EmptyState title="لا توجد سيارة" description="أضف سيارة أولًا ثم ابدأ توثيق الأعطال."/>;
 
   return <div className="space-y-6">
+    <AiSymptomAssistant vehicles={vehiclesQ.data??[]} vehicleId={vehicleId}/>
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><Summary label="أعطال نشطة" value={summary.active}/><Summary label="عادت مرة أخرى" value={summary.returned}/><Summary label="حرجة" value={summary.critical}/><Summary label="تم حلها" value={summary.resolved}/></div>
     <div className="flex flex-col gap-2 rounded-2xl bg-panel p-4 ring-1 ring-border xl:flex-row">
       <label className="relative flex-1"><Search className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-ink-soft"/><input className="w-full rounded-xl border border-border bg-background py-2.5 pr-9 pl-3 text-sm" placeholder="ابحث بالعرض أو الكود أو السبب..." value={query} onChange={e=>setQuery(e.target.value)}/></label>
