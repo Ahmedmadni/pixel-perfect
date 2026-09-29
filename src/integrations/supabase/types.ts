@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      car_symptoms: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       maintenance_categories: {
         Row: {
           created_at: string
@@ -249,6 +279,60 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      symptom_causes: {
+        Row: {
+          base_likelihood: string
+          cause: string
+          created_at: string
+          id: string
+          km_threshold: number | null
+          maintenance_item_id: string | null
+          steps: string | null
+          symptom_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          base_likelihood?: string
+          cause: string
+          created_at?: string
+          id?: string
+          km_threshold?: number | null
+          maintenance_item_id?: string | null
+          steps?: string | null
+          symptom_id: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          base_likelihood?: string
+          cause?: string
+          created_at?: string
+          id?: string
+          km_threshold?: number | null
+          maintenance_item_id?: string | null
+          steps?: string | null
+          symptom_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "symptom_causes_maintenance_item_id_fkey"
+            columns: ["maintenance_item_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "symptom_causes_symptom_id_fkey"
+            columns: ["symptom_id"]
+            isOneToOne: false
+            referencedRelation: "car_symptoms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vehicle_maintenance_schedules: {
         Row: {
