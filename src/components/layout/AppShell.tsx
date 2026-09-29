@@ -5,7 +5,7 @@ import {
   Wrench,
   Receipt,
   Cog,
-  AlertTriangle,
+  AlertTriangle, Stethoscope,
   BarChart3,
   Settings,
   Bell,
@@ -18,7 +18,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { isSupabaseConfigured } from "@/lib/supabase";
 
 type NavItem = {
-  to: "/" | "/vehicles" | "/maintenance" | "/expenses" | "/parts" | "/diagnostics" | "/reminders" | "/reports" | "/settings";
+  to: "/" | "/vehicles" | "/maintenance" | "/expenses" | "/parts" | "/diagnostics" | "/symptoms" | "/reminders" | "/reports" | "/settings";
   label: string;
   icon: LucideIcon;
 };
@@ -30,6 +30,7 @@ const navItems: NavItem[] = [
   { to: "/expenses", label: "المصروفات", icon: Receipt },
   { to: "/parts", label: "قطع الغيار", icon: Cog },
   { to: "/diagnostics", label: "الأعطال", icon: AlertTriangle },
+  { to: "/symptoms", label: "الأعراض", icon: Stethoscope },
   { to: "/reminders", label: "التذكيرات", icon: Bell },
   { to: "/reports", label: "التقارير", icon: BarChart3 },
   { to: "/settings", label: "الإعدادات", icon: Settings },
