@@ -73,7 +73,7 @@ export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanc
       <Field label="العداد عند الظهور"><input className={inputClass} type="number" min="0" value={form.first_odometer??""} onChange={e=>set("first_odometer",e.target.value?Number(e.target.value):null)}/></Field>
       <Field label="الخطورة"><select className={inputClass} value={form.severity} onChange={e=>set("severity",e.target.value as DiagnosticSeverity)}>{(Object.keys(DIAGNOSTIC_SEVERITY_LABELS) as DiagnosticSeverity[]).map(s=><option key={s} value={s}>{DIAGNOSTIC_SEVERITY_LABELS[s]}</option>)}</select></Field>
       <Field label="الحالة"><select className={inputClass} value={form.status} onChange={e=>set("status",e.target.value as DiagnosticStatus)}>{(Object.keys(DIAGNOSTIC_STATUS_LABELS) as DiagnosticStatus[]).map(s=><option key={s} value={s}>{DIAGNOSTIC_STATUS_LABELS[s]}</option>)}</select></Field>
-      <div className="sm:col-span-2"><Field label="أكواد OBD"><input dir="ltr" className={inputClass} placeholder="P0441, P0171" value={codes} onChange={e=>setCodes(e.target.value)}/></Field></div>
+      <div className="sm:col-span-2"><ObdCodePicker codes={codes} onChange={setCodes}/></div>
       <div className="sm:col-span-2"><Field label="الأعراض"><textarea className={inputClass+" min-h-20"} value={form.symptoms??""} onChange={e=>set("symptoms",e.target.value||null)}/></Field></div>
       <Field label="السبب المحتمل"><textarea className={inputClass} value={form.suspected_cause??""} onChange={e=>set("suspected_cause",e.target.value||null)}/></Field>
       <Field label="السبب المؤكد"><textarea className={inputClass} value={form.confirmed_cause??""} onChange={e=>set("confirmed_cause",e.target.value||null)}/></Field>
