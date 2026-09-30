@@ -47,7 +47,7 @@ export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanc
       part_id:issue?.part_id??null,
       notes:issue?.notes??null,
     });
-    setCodes((issue?.obd_codes??[]).join(", "));
+    setCodes(issue?.obd_codes??[]);
     setAttachment(null);setRemoveAttachment(false);
   },[open,issue,vehicleId,vehicles]);
 
