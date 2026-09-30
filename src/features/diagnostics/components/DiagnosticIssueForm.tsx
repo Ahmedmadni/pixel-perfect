@@ -10,13 +10,14 @@ import type { Vehicle } from "@/types/vehicle";
 import { useSaveDiagnosticIssue } from "../hooks/useDiagnostics";
 import { DIAGNOSTIC_SEVERITY_LABELS, DIAGNOSTIC_STATUS_LABELS } from "../lib/analytics";
 import type { DiagnosticIssue, DiagnosticIssueInput, DiagnosticSeverity, DiagnosticStatus } from "../services/diagnostics.service";
+import { ObdCodePicker } from "./ObdCodePicker";
 
 const inputClass="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand/30";
 const today=()=>new Date().toLocaleDateString("en-CA");
 
 export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanceRecords,vehicleId,issue}:{open:boolean;onOpenChange:(v:boolean)=>void;vehicles:Vehicle[];parts:Part[];maintenanceRecords:MaintenanceRecord[];vehicleId?: string | undefined;issue?:DiagnosticIssue|null}){
   const save=useSaveDiagnosticIssue();
-  const [codes,setCodes]=useState("");
+  const [codes,setCodes]=useState<string[]>([]);
   const [attachment,setAttachment]=useState<File|null>(null);
   const [removeAttachment,setRemoveAttachment]=useState(false);
   const [form,setForm]=useState<DiagnosticIssueInput>({
@@ -46,7 +47,7 @@ export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanc
       part_id:issue?.part_id??null,
       notes:issue?.notes??null,
     });
-    setCodes((issue?.obd_codes??[]).join(", "));
+    setCodes(issue?.obd_codes??[]);
     setAttachment(null);setRemoveAttachment(false);
   },[open,issue,vehicleId,vehicles]);
 
@@ -56,7 +57,7 @@ export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanc
 
   function submit(e:React.FormEvent){
     e.preventDefault();
-    const obd_codes=codes.split(/[\s,;]+/).map(v=>v.trim().toUpperCase()).filter(Boolean);
+    const obd_codes=codes.map(v=>v.trim().toUpperCase()).filter(Boolean);
     save.mutate({input:{...form,obd_codes},opts:{id:issue?.id,attachment,removeAttachment,oldAttachment:issue?.attachment_url??null}},{
       onSuccess:()=>{toast.success(issue?"تم تحديث العطل":"تم تسجيل العطل");onOpenChange(false);},
       onError:err=>toast.error(errorMessage(err)),
@@ -72,7 +73,7 @@ export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanc
       <Field label="العداد عند الظهور"><input className={inputClass} type="number" min="0" value={form.first_odometer??""} onChange={e=>set("first_odometer",e.target.value?Number(e.target.value):null)}/></Field>
       <Field label="الخطورة"><select className={inputClass} value={form.severity} onChange={e=>set("severity",e.target.value as DiagnosticSeverity)}>{(Object.keys(DIAGNOSTIC_SEVERITY_LABELS) as DiagnosticSeverity[]).map(s=><option key={s} value={s}>{DIAGNOSTIC_SEVERITY_LABELS[s]}</option>)}</select></Field>
       <Field label="الحالة"><select className={inputClass} value={form.status} onChange={e=>set("status",e.target.value as DiagnosticStatus)}>{(Object.keys(DIAGNOSTIC_STATUS_LABELS) as DiagnosticStatus[]).map(s=><option key={s} value={s}>{DIAGNOSTIC_STATUS_LABELS[s]}</option>)}</select></Field>
-      <div className="sm:col-span-2"><Field label="أكواد OBD"><input dir="ltr" className={inputClass} placeholder="P0441, P0171" value={codes} onChange={e=>setCodes(e.target.value)}/></Field></div>
+      <div className="sm:col-span-2"><ObdCodePicker codes={codes} onChange={setCodes}/></div>
       <div className="sm:col-span-2"><Field label="الأعراض"><textarea className={inputClass+" min-h-20"} value={form.symptoms??""} onChange={e=>set("symptoms",e.target.value||null)}/></Field></div>
       <Field label="السبب المحتمل"><textarea className={inputClass} value={form.suspected_cause??""} onChange={e=>set("suspected_cause",e.target.value||null)}/></Field>
       <Field label="السبب المؤكد"><textarea className={inputClass} value={form.confirmed_cause??""} onChange={e=>set("confirmed_cause",e.target.value||null)}/></Field>

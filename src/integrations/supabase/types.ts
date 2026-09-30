@@ -212,6 +212,30 @@ export type Database = {
           },
         ]
       }
+      obd_fault_codes: {
+        Row: {
+          category: string
+          code: string
+          created_at: string
+          description: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          code: string
+          created_at?: string
+          description: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          code?: string
+          created_at?: string
+          description?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       odometer_readings: {
         Row: {
           created_at: string
