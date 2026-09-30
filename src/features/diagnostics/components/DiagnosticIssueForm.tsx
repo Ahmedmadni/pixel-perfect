@@ -10,6 +10,7 @@ import type { Vehicle } from "@/types/vehicle";
 import { useSaveDiagnosticIssue } from "../hooks/useDiagnostics";
 import { DIAGNOSTIC_SEVERITY_LABELS, DIAGNOSTIC_STATUS_LABELS } from "../lib/analytics";
 import type { DiagnosticIssue, DiagnosticIssueInput, DiagnosticSeverity, DiagnosticStatus } from "../services/diagnostics.service";
+import { ObdCodePicker } from "./ObdCodePicker";
 
 const inputClass="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand/30";
 const today=()=>new Date().toLocaleDateString("en-CA");
