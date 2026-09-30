@@ -17,7 +17,7 @@ const today=()=>new Date().toLocaleDateString("en-CA");
 
 export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanceRecords,vehicleId,issue}:{open:boolean;onOpenChange:(v:boolean)=>void;vehicles:Vehicle[];parts:Part[];maintenanceRecords:MaintenanceRecord[];vehicleId?: string | undefined;issue?:DiagnosticIssue|null}){
   const save=useSaveDiagnosticIssue();
-  const [codes,setCodes]=useState("");
+  const [codes,setCodes]=useState<string[]>([]);
   const [attachment,setAttachment]=useState<File|null>(null);
   const [removeAttachment,setRemoveAttachment]=useState(false);
   const [form,setForm]=useState<DiagnosticIssueInput>({
