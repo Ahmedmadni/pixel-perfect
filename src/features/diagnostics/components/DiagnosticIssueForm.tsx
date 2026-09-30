@@ -57,7 +57,7 @@ export function DiagnosticIssueForm({open,onOpenChange,vehicles,parts,maintenanc
 
   function submit(e:React.FormEvent){
     e.preventDefault();
-    const obd_codes=codes.split(/[\s,;]+/).map(v=>v.trim().toUpperCase()).filter(Boolean);
+    const obd_codes=codes.map(v=>v.trim().toUpperCase()).filter(Boolean);
     save.mutate({input:{...form,obd_codes},opts:{id:issue?.id,attachment,removeAttachment,oldAttachment:issue?.attachment_url??null}},{
       onSuccess:()=>{toast.success(issue?"تم تحديث العطل":"تم تسجيل العطل");onOpenChange(false);},
       onError:err=>toast.error(errorMessage(err)),
