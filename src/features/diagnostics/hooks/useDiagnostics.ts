@@ -2,12 +2,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteDiagnosticEvent,
   deleteDiagnosticIssue,
+  deleteDiagnosticTest,
   getDiagnosticIssues,
   saveDiagnosticEvent,
   saveDiagnosticIssue,
+  saveDiagnosticTest,
   type DiagnosticEventInput,
   type DiagnosticIssue,
   type DiagnosticIssueInput,
+  type DiagnosticTestInput,
 } from "../services/diagnostics.service";
 
 export const diagnosticKeys = {
@@ -40,4 +43,21 @@ export function useSaveDiagnosticEvent(){
 export function useDeleteDiagnosticEvent(){
   const qc=useQueryClient();
   return useMutation({mutationFn:deleteDiagnosticEvent,onSuccess:()=>invalidate(qc)});
+}
+
+
+export function useSaveDiagnosticTest(){
+  const qc=useQueryClient();
+  return useMutation({
+    mutationFn:(args:{input:DiagnosticTestInput;id?:string})=>saveDiagnosticTest(args.input,args.id),
+    onSuccess:()=>invalidate(qc),
+  });
+}
+
+export function useDeleteDiagnosticTest(){
+  const qc=useQueryClient();
+  return useMutation({
+    mutationFn:deleteDiagnosticTest,
+    onSuccess:()=>invalidate(qc),
+  });
 }

@@ -12,4 +12,5 @@
 - [x] Phase 2d: diagnostics, OBD codes, issue timeline, linked parts/maintenance, dashboard alerts
 - [x] Phase 2e: reminders, document expiry sync, vehicle documents
 - [x] Phase 3a: operating-cost reports, monthly trends, category/vehicle breakdowns, CSV export
-- [ ] Phase 3b: reliability and maintenance analytics
+- [x] Phase 3b: comprehensive diagnostic reports, structured test path, root-cause explanation, repair verification, printable/PDF-ready output
+- [ ] Phase 3c: reliability and maintenance analytics
