@@ -7,6 +7,7 @@ const FILE_MAX = 10 * 1024 * 1024;
 export type DiagnosticSeverity = "low" | "medium" | "high" | "critical";
 export type DiagnosticStatus = "open" | "monitoring" | "resolved" | "returned";
 export type DiagnosticEventType = "observed" | "tested" | "repaired" | "returned" | "note";
+export type DiagnosticTestResult = "pass" | "fail" | "inconclusive";
 
 export interface DiagnosticEvent {
   id: string;
@@ -18,11 +19,44 @@ export interface DiagnosticEvent {
   created_at: string;
 }
 
+export interface DiagnosticTest {
+  id: string;
+  issue_id: string;
+  sequence_no: number;
+  performed_date: string;
+  odometer: number | null;
+  system_area: string | null;
+  test_name: string;
+  test_method: string | null;
+  expected_result: string | null;
+  actual_result: string | null;
+  result_status: DiagnosticTestResult;
+  conclusion: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DiagnosticTestInput {
+  issue_id: string;
+  sequence_no: number;
+  performed_date: string;
+  odometer: number | null;
+  system_area: string | null;
+  test_name: string;
+  test_method: string | null;
+  expected_result: string | null;
+  actual_result: string | null;
+  result_status: DiagnosticTestResult;
+  conclusion: string | null;
+}
+
 export interface DiagnosticIssue {
   id: string;
   vehicle_id: string;
   title: string;
   symptoms: string | null;
+  operating_conditions: string | null;
+  diagnostic_summary: string | null;
   obd_codes: string[];
   severity: DiagnosticSeverity;
   status: DiagnosticStatus;
@@ -30,6 +64,11 @@ export interface DiagnosticIssue {
   first_odometer: number | null;
   suspected_cause: string | null;
   confirmed_cause: string | null;
+  root_cause_explanation: string | null;
+  repair_actions: string | null;
+  verification_result: string | null;
+  prevention_notes: string | null;
+  safe_to_drive: boolean | null;
   resolution: string | null;
   resolved_date: string | null;
   resolved_odometer: number | null;
@@ -39,16 +78,37 @@ export interface DiagnosticIssue {
   notes: string | null;
   created_at: string;
   updated_at: string;
-  vehicle?: { name: string } | null;
-  part?: { name_ar: string; part_number: string | null } | null;
-  maintenance?: { id: string; service_date: string; item: { name_ar: string } | null } | null;
+  vehicle?: {
+    name: string;
+    manufacturer: string | null;
+    model: string | null;
+    model_year: number | null;
+    trim: string | null;
+    vin: string | null;
+    plate_number: string | null;
+    engine: string | null;
+    transmission: string | null;
+    fuel_type: string | null;
+    current_odometer: number;
+  } | null;
+  part?: { name_ar: string; part_number: string | null; manufacturer: string | null } | null;
+  maintenance?: {
+    id: string;
+    service_date: string;
+    odometer: number | null;
+    cost: number;
+    item: { name_ar: string } | null;
+  } | null;
   events: DiagnosticEvent[];
+  tests: DiagnosticTest[];
 }
 
 export interface DiagnosticIssueInput {
   vehicle_id: string;
   title: string;
   symptoms: string | null;
+  operating_conditions: string | null;
+  diagnostic_summary: string | null;
   obd_codes: string[];
   severity: DiagnosticSeverity;
   status: DiagnosticStatus;
@@ -56,6 +116,11 @@ export interface DiagnosticIssueInput {
   first_odometer: number | null;
   suspected_cause: string | null;
   confirmed_cause: string | null;
+  root_cause_explanation: string | null;
+  repair_actions: string | null;
+  verification_result: string | null;
+  prevention_notes: string | null;
+  safe_to_drive: boolean | null;
   resolution: string | null;
   resolved_date: string | null;
   resolved_odometer: number | null;
@@ -76,21 +141,25 @@ export async function getDiagnosticIssues(vehicleId?: string): Promise<Diagnosti
   const c = requireClient();
   let q = c
     .from("diagnostic_issues")
-    .select("*, vehicle:vehicles(name), part:parts(name_ar,part_number), maintenance:maintenance_records(id,service_date,item:maintenance_items(name_ar)), events:diagnostic_events(*)")
+    .select("*, vehicle:vehicles(name,manufacturer,model,model_year,trim,vin,plate_number,engine,transmission,fuel_type,current_odometer), part:parts(name_ar,part_number,manufacturer), maintenance:maintenance_records(id,service_date,odometer,cost,item:maintenance_items(name_ar)), events:diagnostic_events(*), tests:diagnostic_tests(*)")
     .order("first_detected_date", { ascending: false })
     .order("created_at", { ascending: false });
   if (vehicleId) q = q.eq("vehicle_id", vehicleId);
   const { data, error } = await q;
   if (error) throw toDataError(error);
-  type IssueRow = Omit<DiagnosticIssue, "events" | "obd_codes"> & {
+  type IssueRow = Omit<DiagnosticIssue, "events" | "tests" | "obd_codes"> & {
     obd_codes: string[] | null;
     events: DiagnosticEvent[] | null;
+    tests: DiagnosticTest[] | null;
   };
   return ((data ?? []) as unknown as IssueRow[]).map((row) => ({
     ...row,
     obd_codes: row.obd_codes ?? [],
     events: [...(row.events ?? [])].sort((a, b) =>
       b.event_date.localeCompare(a.event_date) || b.created_at.localeCompare(a.created_at),
+    ),
+    tests: [...(row.tests ?? [])].sort((a, b) =>
+      a.sequence_no - b.sequence_no || a.performed_date.localeCompare(b.performed_date),
     ),
   }));
 }
@@ -106,6 +175,9 @@ export function validateIssue(input: DiagnosticIssueInput): string | null {
   if (input.first_detected_date > today()) return "تاريخ ظهور العطل لا يمكن أن يكون في المستقبل.";
   if (input.first_odometer != null && (!Number.isFinite(input.first_odometer) || input.first_odometer < 0)) return "قراءة العداد غير صحيحة.";
   if (input.status === "resolved" && !input.resolved_date) return "أدخل تاريخ حل العطل.";
+  if (input.status === "resolved" && !input.confirmed_cause?.trim()) return "أدخل السبب المؤكد قبل إغلاق العطل.";
+  if (input.status === "resolved" && !(input.repair_actions?.trim() || input.resolution?.trim())) return "وثّق إجراء الإصلاح قبل إغلاق العطل.";
+  if (input.status === "resolved" && !input.verification_result?.trim()) return "وثّق نتيجة التحقق بعد الإصلاح قبل إغلاق العطل.";
   if (input.resolved_date && input.resolved_date > today()) return "تاريخ الحل لا يمكن أن يكون في المستقبل.";
   return null;
 }
@@ -195,9 +267,7 @@ export async function saveDiagnosticEvent(input: DiagnosticEventInput) {
   }
   if (input.event_type === "repaired") {
     await c.from("diagnostic_issues").update({
-      status: "resolved",
-      resolved_date: input.event_date,
-      resolved_odometer: input.odometer,
+      status: "monitoring",
     }).eq("id", input.issue_id);
   }
   return data.id as string;
@@ -215,4 +285,50 @@ export async function getDiagnosticDocumentUrl(path: string) {
   const { data, error } = await c.storage.from(DIAGNOSTIC_BUCKET).createSignedUrl(path, 300);
   if (error) throw toDataError(error);
   return data.signedUrl;
+}
+
+
+export function validateDiagnosticTest(input: DiagnosticTestInput): string | null {
+  if (!input.issue_id) return "العطل غير محدد.";
+  if (!input.test_name.trim()) return "اسم الفحص مطلوب.";
+  if (!input.performed_date) return "أدخل تاريخ الفحص.";
+  if (!Number.isFinite(input.sequence_no) || input.sequence_no <= 0) return "ترتيب الفحص غير صحيح.";
+  if (input.odometer != null && (!Number.isFinite(input.odometer) || input.odometer < 0)) return "قراءة العداد غير صحيحة.";
+  if (!input.actual_result?.trim()) return "سجّل النتيجة الفعلية للفحص.";
+  return null;
+}
+
+export async function saveDiagnosticTest(input: DiagnosticTestInput, id?: string) {
+  const invalid = validateDiagnosticTest(input);
+  if (invalid) throw new DataProviderError("VALIDATION_ERROR", invalid);
+
+  const c = requireClient();
+  const user_id = await requireUserId(c);
+
+  if (id) {
+    const { data, error } = await c
+      .from("diagnostic_tests")
+      .update(input)
+      .eq("id", id)
+      .select("id")
+      .maybeSingle();
+    if (error) throw toDataError(error);
+    if (!data) throw new DataProviderError("NOT_FOUND");
+    return id;
+  }
+
+  const { data, error } = await c
+    .from("diagnostic_tests")
+    .insert({ ...input, user_id })
+    .select("id")
+    .single();
+  if (error) throw toDataError(error);
+  return data.id as string;
+}
+
+export async function deleteDiagnosticTest(id: string) {
+  const c = requireClient();
+  const { data, error } = await c.from("diagnostic_tests").delete().eq("id", id).select("id");
+  if (error) throw toDataError(error);
+  if (!data?.length) throw new DataProviderError("NOT_FOUND");
 }

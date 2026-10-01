@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/diagnostics")({
     ],
   }),
   component: () => (
-    <AppShell title="الأعطال" subtitle="التشخيص وأكواد OBD وسجل الإصلاح">
+    <AppShell title="الأعطال" subtitle="من اختيار السيارة ووصف المشكلة حتى السبب الجذري والحل">
       <DiagnosticsWorkspace />
     </AppShell>
   ),

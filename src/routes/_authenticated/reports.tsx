@@ -6,13 +6,13 @@ export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
       { title: "التقارير · كمتر" },
-      { name: "description", content: "تقارير المصروفات والتكاليف ومؤشرات تشغيل السيارة." },
+      { name: "description", content: "تقارير الأعطال الشاملة والتشخيص ومصروفات وتشغيل السيارة." },
       { property: "og:title", content: "التقارير · كمتر" },
       { property: "og:description", content: "تقارير المصروفات والتكاليف ومؤشرات تشغيل السيارة." },
     ],
   }),
   component: () => (
-    <AppShell title="التقارير" subtitle="تحليل التكاليف واتجاهات التشغيل">
+    <AppShell title="التقارير" subtitle="تقارير الأعطال الشاملة والتحليل التشغيلي">
       <ReportsWorkspace />
     </AppShell>
   ),

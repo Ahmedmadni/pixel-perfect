@@ -16,6 +16,7 @@ import { CardsSkeleton, EmptyState, QueryErrorState } from "@/components/common/
 import { useExpenses } from "@/features/expenses/hooks/useExpenses";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
+import { DiagnosticReportsPanel } from "./DiagnosticReportsPanel";
 import { formatCurrency, formatKm } from "@/lib/format";
 import {
   categoryExpenseSeries,
@@ -101,6 +102,15 @@ export function ReportsWorkspace() {
 
   return (
     <div className="space-y-6 print:bg-white">
+      <DiagnosticReportsPanel vehicles={vehiclesQ.data ?? []} />
+
+      <div className="border-t border-border pt-2">
+        <div className="mb-3">
+          <p className="text-xs font-medium text-brand-deep">تقارير التشغيل والتكلفة</p>
+          <h2 className="mt-1 text-lg font-semibold">التحليل المالي والتشغيلي</h2>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2 rounded-2xl bg-panel p-4 ring-1 ring-border print:hidden lg:flex-row lg:items-center">
         <select
           className="rounded-xl border border-border bg-background px-3 py-2.5 text-sm"
