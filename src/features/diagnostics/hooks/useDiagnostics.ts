@@ -49,7 +49,7 @@ export function useDeleteDiagnosticEvent(){
 export function useSaveDiagnosticTest(){
   const qc=useQueryClient();
   return useMutation({
-    mutationFn:(args:{input:DiagnosticTestInput;id?:string})=>saveDiagnosticTest(args.input,args.id),
+    mutationFn:(args:{input:DiagnosticTestInput;id?:string|undefined})=>saveDiagnosticTest(args.input,args.id),
     onSuccess:()=>invalidate(qc),
   });
 }
