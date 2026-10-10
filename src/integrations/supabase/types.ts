@@ -44,6 +44,224 @@ export type Database = {
         }
         Relationships: []
       }
+      diagnostic_events: {
+        Row: {
+          created_at: string
+          details: string
+          event_date: string
+          event_type: string
+          id: string
+          issue_id: string
+          odometer: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string
+          event_date?: string
+          event_type?: string
+          id?: string
+          issue_id: string
+          odometer?: number | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string
+          event_date?: string
+          event_type?: string
+          id?: string
+          issue_id?: string
+          odometer?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnostic_events_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "diagnostic_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diagnostic_issues: {
+        Row: {
+          attachment_url: string | null
+          confirmed_cause: string | null
+          created_at: string
+          diagnostic_summary: string | null
+          first_detected_date: string
+          first_odometer: number | null
+          id: string
+          maintenance_record_id: string | null
+          notes: string | null
+          obd_codes: string[]
+          operating_conditions: string | null
+          part_id: string | null
+          prevention_notes: string | null
+          repair_actions: string | null
+          resolution: string | null
+          resolved_date: string | null
+          resolved_odometer: number | null
+          root_cause_explanation: string | null
+          safe_to_drive: boolean | null
+          severity: string
+          status: string
+          suspected_cause: string | null
+          symptoms: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          vehicle_id: string
+          verification_result: string | null
+        }
+        Insert: {
+          attachment_url?: string | null
+          confirmed_cause?: string | null
+          created_at?: string
+          diagnostic_summary?: string | null
+          first_detected_date?: string
+          first_odometer?: number | null
+          id?: string
+          maintenance_record_id?: string | null
+          notes?: string | null
+          obd_codes?: string[]
+          operating_conditions?: string | null
+          part_id?: string | null
+          prevention_notes?: string | null
+          repair_actions?: string | null
+          resolution?: string | null
+          resolved_date?: string | null
+          resolved_odometer?: number | null
+          root_cause_explanation?: string | null
+          safe_to_drive?: boolean | null
+          severity?: string
+          status?: string
+          suspected_cause?: string | null
+          symptoms?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string
+          vehicle_id: string
+          verification_result?: string | null
+        }
+        Update: {
+          attachment_url?: string | null
+          confirmed_cause?: string | null
+          created_at?: string
+          diagnostic_summary?: string | null
+          first_detected_date?: string
+          first_odometer?: number | null
+          id?: string
+          maintenance_record_id?: string | null
+          notes?: string | null
+          obd_codes?: string[]
+          operating_conditions?: string | null
+          part_id?: string | null
+          prevention_notes?: string | null
+          repair_actions?: string | null
+          resolution?: string | null
+          resolved_date?: string | null
+          resolved_odometer?: number | null
+          root_cause_explanation?: string | null
+          safe_to_drive?: boolean | null
+          severity?: string
+          status?: string
+          suspected_cause?: string | null
+          symptoms?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          vehicle_id?: string
+          verification_result?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnostic_issues_maintenance_record_id_fkey"
+            columns: ["maintenance_record_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diagnostic_issues_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diagnostic_issues_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diagnostic_tests: {
+        Row: {
+          actual_result: string | null
+          conclusion: string | null
+          created_at: string
+          expected_result: string | null
+          id: string
+          issue_id: string
+          odometer: number | null
+          performed_date: string
+          result_status: string
+          sequence_no: number
+          system_area: string | null
+          test_method: string | null
+          test_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_result?: string | null
+          conclusion?: string | null
+          created_at?: string
+          expected_result?: string | null
+          id?: string
+          issue_id: string
+          odometer?: number | null
+          performed_date?: string
+          result_status?: string
+          sequence_no?: number
+          system_area?: string | null
+          test_method?: string | null
+          test_name: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          actual_result?: string | null
+          conclusion?: string | null
+          created_at?: string
+          expected_result?: string | null
+          id?: string
+          issue_id?: string
+          odometer?: number | null
+          performed_date?: string
+          result_status?: string
+          sequence_no?: number
+          system_area?: string | null
+          test_method?: string | null
+          test_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnostic_tests_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "diagnostic_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_categories: {
         Row: {
           created_at: string
@@ -277,6 +495,224 @@ export type Database = {
           },
         ]
       }
+      part_installations: {
+        Row: {
+          created_at: string
+          id: string
+          install_date: string
+          maintenance_record_id: string | null
+          notes: string | null
+          odometer: number | null
+          other_cost: number
+          part_id: string
+          quantity: number
+          receipt_url: string | null
+          supplier_id: string | null
+          total_cost: number | null
+          unit_price: number
+          user_id: string
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          install_date?: string
+          maintenance_record_id?: string | null
+          notes?: string | null
+          odometer?: number | null
+          other_cost?: number
+          part_id: string
+          quantity?: number
+          receipt_url?: string | null
+          supplier_id?: string | null
+          total_cost?: number | null
+          unit_price?: number
+          user_id?: string
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          install_date?: string
+          maintenance_record_id?: string | null
+          notes?: string | null
+          odometer?: number | null
+          other_cost?: number
+          part_id?: string
+          quantity?: number
+          receipt_url?: string | null
+          supplier_id?: string | null
+          total_cost?: number | null
+          unit_price?: number
+          user_id?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "part_installations_maintenance_record_id_fkey"
+            columns: ["maintenance_record_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_installations_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_installations_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_installations_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      part_prices: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          observed_date: string
+          part_id: string
+          price: number
+          purchase_url: string | null
+          supplier_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          observed_date?: string
+          part_id: string
+          price: number
+          purchase_url?: string | null
+          supplier_id?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          observed_date?: string
+          part_id?: string
+          price?: number
+          purchase_url?: string | null
+          supplier_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "part_prices_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_prices_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      part_vehicle_fitments: {
+        Row: {
+          id: string
+          part_id: string
+          user_id: string
+          vehicle_id: string
+        }
+        Insert: {
+          id?: string
+          part_id: string
+          user_id?: string
+          vehicle_id: string
+        }
+        Update: {
+          id?: string
+          part_id?: string
+          user_id?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "part_vehicle_fitments_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_vehicle_fitments_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parts: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          is_oem: boolean
+          manufacturer: string | null
+          name_ar: string
+          name_en: string | null
+          notes: string | null
+          oem_part_number: string | null
+          part_number: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_oem?: boolean
+          manufacturer?: string | null
+          name_ar: string
+          name_en?: string | null
+          notes?: string | null
+          oem_part_number?: string | null
+          part_number?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_oem?: boolean
+          manufacturer?: string | null
+          name_ar?: string
+          name_en?: string | null
+          notes?: string | null
+          oem_part_number?: string | null
+          part_number?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -301,6 +737,39 @@ export type Database = {
           phone?: string | null
           preferred_language?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      suppliers: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          user_id?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          user_id?: string
+          website?: string | null
         }
         Relationships: []
       }
