@@ -141,7 +141,7 @@ export async function getDiagnosticIssues(vehicleId?: string): Promise<Diagnosti
   const c = requireClient();
   let q = c
     .from("diagnostic_issues")
-    .select("*, vehicle:vehicles(name,manufacturer,model,model_year,trim,vin,plate_number,engine,transmission,fuel_type,current_odometer), part:parts(name_ar,part_number,manufacturer), maintenance:maintenance_records(id,service_date,odometer,cost,item:maintenance_items(name_ar)), events:diagnostic_events(*), tests:diagnostic_tests(*)")
+    .select("*, vehicle:vehicles(name,manufacturer,model,model_year,trim,vin,plate_number,engine,transmission,fuel_type,current_odometer), part:parts(name_ar,part_number,manufacturer), maintenance:maintenance_records(id,service_date,odometer,cost:total_cost,item:maintenance_items(name_ar)), events:diagnostic_events(*), tests:diagnostic_tests(*)")
     .order("first_detected_date", { ascending: false })
     .order("created_at", { ascending: false });
   if (vehicleId) q = q.eq("vehicle_id", vehicleId);
