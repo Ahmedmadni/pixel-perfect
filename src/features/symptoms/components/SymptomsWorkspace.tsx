@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { Plus, Stethoscope, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
@@ -45,10 +46,10 @@ export function SymptomsWorkspace({ initialVehicleId, initialSymptomId }: { init
         <p className="text-sm font-semibold">الأعراض</p>
         <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (newName.trim()) addSym.mutate(); }}>
           <input className={input} placeholder="مثال: اهتزاز عند الفرملة" value={newName} onChange={(e) => setNewName(e.target.value)} />
-          <button className={primaryBtn} disabled={addSym.isPending} aria-label="إضافة عرض"><Plus className="size-4" /></button>
+          <Button className={primaryBtn} type="submit" disabled={addSym.isPending} aria-label="إضافة عرض"><Plus className="size-4" /></Button>
         </form>
         {symptoms.length ? <ul className="space-y-1">{symptoms.map((s) => (
-          <li key={s.id}><button onClick={() => setSelId(s.id)} className={"w-full rounded-xl px-3 py-2 text-right text-sm " + (selected?.id === s.id ? "bg-brand/10 font-medium text-brand" : "hover:bg-secondary")}>{s.name} <span className="text-xs text-ink-soft">({s.causes.length})</span></button></li>
+          <li key={s.id}><Button variant="ghost" onClick={() => setSelId(s.id)} className={"h-auto w-full justify-start whitespace-normal rounded-xl px-3 py-2 text-right text-sm " + (selected?.id === s.id ? "bg-brand/10 font-medium text-brand" : "hover:bg-secondary")}>{s.name} <span className="text-xs text-ink-soft">({s.causes.length})</span></Button></li>
         ))}</ul> : <p className="text-xs text-ink-soft">لا توجد أعراض بعد. أضف أول عرض.</p>}
       </aside>
 
@@ -58,7 +59,7 @@ export function SymptomsWorkspace({ initialVehicleId, initialSymptomId }: { init
             <h2 className="text-lg font-semibold">{selected.name}</h2>
             <div className="flex gap-2">
               {vehicles.length > 1 ? <select className={input + " w-auto"} value={vehicle?.id} onChange={(e) => setVid(e.target.value)}>{vehicles.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}</select> : null}
-              <ConfirmDialog title="حذف العرض؟" description="سيتم حذف العرض وكل أسبابه." confirmLabel="حذف" onConfirm={() => delSym.mutate(selected.id)} trigger={<button className={secondaryBtn + " text-destructive"}><Trash2 className="size-4" /> حذف</button>} />
+              <ConfirmDialog title="حذف العرض؟" description="سيتم حذف العرض وكل أسبابه." confirmLabel="حذف" onConfirm={() => delSym.mutate(selected.id)} trigger={<Button variant="outline" className={secondaryBtn + " text-destructive"}><Trash2 className="size-4" /> حذف</Button>} />
             </div>
           </div>
 
@@ -100,7 +101,7 @@ function CausesEditor({ symptom, items, onChange }: { symptom: Symptom; items: {
       {symptom.causes.length ? <ul className="mb-4 space-y-2">{symptom.causes.map((c) => (
         <li key={c.id} className="flex items-start justify-between gap-2 rounded-xl border border-border p-3 text-sm">
           <div><p className="font-medium">{c.cause}</p><p className="text-xs text-ink-soft">{likeLabel[c.base_likelihood]}{c.maintenance_item_id ? ` · مرتبط بـ ${name(c.maintenance_item_id) ?? "صيانة"}` : ""}{c.km_threshold ? ` · الحد ${c.km_threshold.toLocaleString("en")} كم` : ""}</p></div>
-          <button onClick={() => del.mutate(c.id)} aria-label="حذف السبب" className="opacity-60 hover:opacity-100"><Trash2 className="size-4" /></button>
+          <Button variant="ghost" size="icon" disabled={del.isPending} onClick={() => del.mutate(c.id)} aria-label="حذف السبب" className="opacity-60 hover:opacity-100"><Trash2 className="size-4" /></Button>
         </li>))}</ul> : null}
       <form className="grid gap-2 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); save.mutate(); }}>
         <input className={input + " sm:col-span-2"} placeholder="السبب (مثال: تآكل أقراص الفرامل)" value={f.cause} onChange={(e) => setF({ ...f, cause: e.target.value })} />
@@ -108,7 +109,7 @@ function CausesEditor({ symptom, items, onChange }: { symptom: Symptom; items: {
         <input className={input} type="number" min={1} placeholder="حد الكيلومترات منذ آخر صيانة (اختياري)" value={f.km_threshold} onChange={(e) => setF({ ...f, km_threshold: e.target.value })} />
         <select className={input} value={f.base_likelihood} onChange={(e) => setF({ ...f, base_likelihood: e.target.value as Likelihood })}><option value="high">مرجّح</option><option value="medium">محتمل</option><option value="low">أقل احتمالاً</option></select>
         <textarea className={input + " sm:col-span-2"} rows={2} placeholder="خطوات الإصلاح (سطر لكل خطوة)" value={f.steps} onChange={(e) => setF({ ...f, steps: e.target.value })} />
-        <button className={primaryBtn + " justify-self-start"} disabled={save.isPending || !f.cause.trim()}><Plus className="size-4" /> إضافة سبب</button>
+        <Button type="submit" className={primaryBtn + " justify-self-start"} disabled={save.isPending || !f.cause.trim()}><Plus className="size-4" /> إضافة سبب</Button>
       </form>
     </div>
   );
