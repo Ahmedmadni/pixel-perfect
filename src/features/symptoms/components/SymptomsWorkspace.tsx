@@ -1,47 +1,43 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Stethoscope, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { primaryBtn, secondaryBtn } from "@/components/common/buttons";
 import { CardsSkeleton, EmptyState, QueryErrorState, StatusBadge } from "@/components/common/states";
-import { useMaintenanceItems, useMaintenanceSchedules } from "@/features/maintenance/hooks/useMaintenance";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { errorMessage } from "@/lib/data-provider";
-import { rankCauses, type ScheduleLike } from "../lib/symptom-rules";
-import { deleteCause, deleteSymptom, getSymptoms, saveCause, saveSymptom, type Likelihood, type Symptom } from "../services/symptoms.service";
+import { deleteCause, deleteSymptom, saveCause, saveSymptom, type Likelihood, type Symptom } from "../services/symptoms.service";
+import { useSymptomHistory } from "../hooks/useSymptomHistory";
+import { SymptomHistoryPanel } from "./SymptomHistoryPanel";
 
 const input = "w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm";
 const likeLabel: Record<Likelihood, string> = { high: "مرجّح", medium: "محتمل", low: "أقل احتمالاً" };
 const likeTone = { high: "danger", medium: "warning", low: "neutral" } as const;
 
-export function SymptomsWorkspace() {
+export function SymptomsWorkspace({ initialVehicleId, initialSymptomId }: { initialVehicleId?: string | undefined; initialSymptomId?: string | undefined }) {
   const qc = useQueryClient();
-  const symptomsQ = useQuery({ queryKey: ["symptoms"], queryFn: getSymptoms, retry: false });
   const vehiclesQ = useVehicles();
-  const itemsQ = useMaintenanceItems();
   const vehicles = vehiclesQ.data ?? [];
-  const [vid, setVid] = useState("");
+  const [vid, setVid] = useState(initialVehicleId ?? "");
   const vehicle = vehicles.find((v) => v.id === vid) ?? vehicles.find((v) => v.is_active) ?? vehicles[0];
-  const schedulesQ = useMaintenanceSchedules(vehicle?.id);
-  const [selId, setSelId] = useState<string | null>(null);
+  const history = useSymptomHistory(vehicle);
+  const [selId, setSelId] = useState<string | null>(initialSymptomId ?? null);
   const [newName, setNewName] = useState("");
   const inv = () => qc.invalidateQueries({ queryKey: ["symptoms"] });
   const onErr = (e: unknown) => toast.error(errorMessage(e));
   const addSym = useMutation({ mutationFn: () => saveSymptom({ name: newName.trim(), description: null, category: null }), onSuccess: () => { setNewName(""); inv(); toast.success("تمت إضافة العرض"); }, onError: onErr });
   const delSym = useMutation({ mutationFn: deleteSymptom, onSuccess: () => { setSelId(null); inv(); }, onError: onErr });
 
-  const symptoms = symptomsQ.data ?? [];
+  const symptoms = history.symptoms;
   const selected = symptoms.find((s) => s.id === selId) ?? symptoms[0];
-  const items = itemsQ.data ?? [];
-  const itemName = (id: string) => items.find((i) => i.id === id)?.name_ar ?? "صيانة";
-  const ranked = useMemo(() => selected && vehicle
-    ? rankCauses(selected.causes, (schedulesQ.data ?? []) as unknown as ScheduleLike[], vehicle.current_odometer, itemName)
-    : [], [selected, vehicle, schedulesQ.data, items]); // eslint-disable-line react-hooks/exhaustive-deps
+  const items = history.items;
+  const linked = history.links.find((link) => link.symptom.id === selected?.id);
+  const ranked = linked?.ranked ?? [];
 
-  if (symptomsQ.isPending || vehiclesQ.isPending || itemsQ.isPending) return <CardsSkeleton count={4} />;
-  const err = symptomsQ.error ?? vehiclesQ.error ?? itemsQ.error;
-  if (err) return <QueryErrorState error={err} onRetry={() => { symptomsQ.refetch(); vehiclesQ.refetch(); itemsQ.refetch(); }} />;
+  if (history.isPending || vehiclesQ.isPending) return <CardsSkeleton count={4} />;
+  const err = history.error ?? vehiclesQ.error;
+  if (err) return <QueryErrorState error={err} onRetry={() => { history.refetch(); vehiclesQ.refetch(); }} />;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[18rem_1fr]">
@@ -79,7 +75,8 @@ export function SymptomsWorkspace() {
                 </li>))}</ol>}
           </div>
 
-          <CausesEditor symptom={selected} items={items.map((i) => ({ id: i.id, name: i.name_ar }))} onChange={inv} />
+          {linked && vehicle ? <SymptomHistoryPanel link={linked} vehicleId={vehicle.id} /> : null}
+          <CausesEditor key={selected.id} symptom={selected} items={items.map((i) => ({ id: i.id, name: i.name_ar }))} onChange={inv} />
         </section>
       ) : <EmptyState icon={Stethoscope} title="لا توجد أعراض" description="أضف عرضاً من القائمة ثم اربطه بأسبابه وأنواع الصيانة." />}
     </div>

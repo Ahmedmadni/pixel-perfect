@@ -9,6 +9,7 @@ import { UpcomingMaintenanceCard } from "@/features/maintenance/components/Upcom
 import { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
 import { DiagnosticAlertCard } from "@/features/diagnostics/components/DiagnosticAlertCard";
 import { ReminderDashboardCard } from "@/features/reminders/components/ReminderDashboardCard";
+import { SymptomDueCard } from "@/features/symptoms/components/SymptomDueCard";
 import { isNotConnected } from "@/lib/data-provider";
 import { formatCurrency, formatKm } from "@/lib/format";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
@@ -101,6 +102,7 @@ function Dashboard() {
       </div>
 
       {primary ? <div className="mt-8"><UpcomingMaintenanceCard vehicle={primary} /></div> : null}
+      {primary ? <SymptomDueCard vehicle={primary} /> : null}
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MonthlyExpenseCard />
