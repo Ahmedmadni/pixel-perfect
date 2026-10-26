@@ -4,8 +4,8 @@ import { SymptomsWorkspace } from "@/features/symptoms/components/SymptomsWorksp
 
 export const Route = createFileRoute("/_authenticated/symptoms")({
   validateSearch: (search: Record<string, unknown>): { vehicleId?: string; symptomId?: string } => ({
-    ...(typeof search.vehicleId === "string" ? { vehicleId: search.vehicleId } : {}),
-    ...(typeof search.symptomId === "string" ? { symptomId: search.symptomId } : {}),
+    ...(typeof search['vehicleId'] === "string" ? { vehicleId: search['vehicleId'] } : {}),
+    ...(typeof search['symptomId'] === "string" ? { symptomId: search['symptomId'] } : {}),
   }),
   head: () => ({
     meta: [
