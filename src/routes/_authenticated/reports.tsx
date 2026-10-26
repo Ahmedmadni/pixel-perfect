@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/reports")({
       { name: "description", content: "تقارير الأعطال الشاملة والتشخيص ومصروفات وتشغيل السيارة." },
       { property: "og:title", content: "التقارير · كمتر" },
       { property: "og:description", content: "تقارير المصروفات والتكاليف ومؤشرات تشغيل السيارة." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

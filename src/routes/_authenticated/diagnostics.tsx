@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/diagnostics")({
       { name: "description", content: "توثيق الأعطال وأكواد الفحص ومتابعة إصلاحها." },
       { property: "og:title", content: "الأعطال · كمتر" },
       { property: "og:description", content: "توثيق الأعطال وأكواد الفحص ومتابعة إصلاحها." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

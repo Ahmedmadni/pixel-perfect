@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/expenses")({
       { name: "description", content: "تتبع مصروفات الوقود والصيانة والإصلاحات." },
       { property: "og:title", content: "المصروفات · كمتر" },
       { property: "og:description", content: "تتبع مصروفات الوقود والصيانة والإصلاحات." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

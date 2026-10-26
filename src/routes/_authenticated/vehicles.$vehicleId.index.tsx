@@ -43,6 +43,8 @@ export const Route = createFileRoute("/_authenticated/vehicles/$vehicleId/")({
       { name: "description", content: "بيانات السيارة وسجل قراءات العداد." },
       { property: "og:title", content: "تفاصيل السيارة · كمتر" },
       { property: "og:description", content: "بيانات السيارة وسجل قراءات العداد." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/reminders")({
       { name: "description", content: "متابعة مواعيد التجديد والفحص والالتزامات القادمة." },
       { property: "og:title", content: "التذكيرات · كمتر" },
       { property: "og:description", content: "متابعة مواعيد التجديد والفحص والالتزامات القادمة." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

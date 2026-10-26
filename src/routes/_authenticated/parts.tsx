@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/parts")({
       { name: "description", content: "أرشيف قطع الغيار وأسعارها ومورديها." },
       { property: "og:title", content: "قطع الغيار · كمتر" },
       { property: "og:description", content: "أرشيف قطع الغيار وأسعارها ومورديها." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (
