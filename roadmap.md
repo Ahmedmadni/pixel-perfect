@@ -14,3 +14,4 @@
 - [x] Phase 3a: operating-cost reports, monthly trends, category/vehicle breakdowns, CSV export
 - [x] Phase 3b: comprehensive diagnostic reports, structured test path, root-cause explanation, repair verification, printable/PDF-ready output
 - [ ] Phase 3c: reliability and maintenance analytics
+- [x] Link symptoms to vehicle maintenance/diagnostic history and dashboard due-repair alerts (19 rule tests passed; signed-in page checked, account has no vehicles/history for populated end-to-end verification)

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/_authenticated/vehicles/$vehicleId/edit")
       { name: "description", content: "تعديل بيانات السيارة." },
       { property: "og:title", content: "تعديل السيارة · كمتر" },
       { property: "og:description", content: "تعديل بيانات السيارة." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

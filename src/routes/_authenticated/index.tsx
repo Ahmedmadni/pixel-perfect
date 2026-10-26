@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Car, Gauge, Plus, Receipt, Wrench, type LucideIcon } from "lucide-react";
+import { Car, Gauge, Plus, Receipt, Stethoscope, Wrench, type LucideIcon } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { EmptyState, NotConnectedState, QueryErrorState } from "@/components/common/states";
 import { primaryBtn } from "@/components/common/buttons";
@@ -9,6 +9,7 @@ import { UpcomingMaintenanceCard } from "@/features/maintenance/components/Upcom
 import { MonthlyExpenseCard } from "@/features/expenses/components/MonthlyExpenseCard";
 import { DiagnosticAlertCard } from "@/features/diagnostics/components/DiagnosticAlertCard";
 import { ReminderDashboardCard } from "@/features/reminders/components/ReminderDashboardCard";
+import { SymptomDueCard } from "@/features/symptoms/components/SymptomDueCard";
 import { isNotConnected } from "@/lib/data-provider";
 import { formatCurrency, formatKm } from "@/lib/format";
 import { currentBookValue } from "@/features/depreciation/lib/depreciation";
@@ -36,7 +37,7 @@ function QuickAction({
 }: {
   icon: LucideIcon;
   label: string;
-  to: "/vehicles/new" | "/vehicles" | "/maintenance" | "/expenses";
+  to: "/vehicles/new" | "/vehicles" | "/maintenance" | "/expenses" | "/symptoms";
   soon?: boolean;
 }) {
   return (
@@ -93,14 +94,16 @@ function Dashboard() {
       )}
 
       <h2 className="mt-8 mb-3 text-base font-semibold">إجراءات سريعة</h2>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
         <QuickAction icon={Plus} label="إضافة سيارة" to="/vehicles/new" />
         <QuickAction icon={Gauge} label="تحديث العداد" to="/vehicles" />
         <QuickAction icon={Wrench} label="تسجيل صيانة" to="/maintenance" />
         <QuickAction icon={Receipt} label="المصروفات" to="/expenses" />
+        <QuickAction icon={Stethoscope} label="الأعراض وسجل السيارة" to="/symptoms" />
       </div>
 
       {primary ? <div className="mt-8"><UpcomingMaintenanceCard vehicle={primary} /></div> : null}
+      {primary ? <SymptomDueCard vehicle={primary} /> : null}
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MonthlyExpenseCard />

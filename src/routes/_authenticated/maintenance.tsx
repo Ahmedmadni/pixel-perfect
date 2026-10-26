@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated/maintenance")({
       { name: "description", content: "سجل الصيانة الدورية والمجدولة لسياراتك." },
       { property: "og:title", content: "الصيانة · كمتر" },
       { property: "og:description", content: "سجل الصيانة الدورية والمجدولة لسياراتك." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: () => (

@@ -19,6 +19,8 @@ export const Route = createFileRoute("/_authenticated/settings")({
       { name: "description", content: "بيانات الحساب واللغة وتفضيلات التنبيهات." },
       { property: "og:title", content: "الإعدادات · كمتر" },
       { property: "og:description", content: "بيانات الحساب واللغة وتفضيلات التنبيهات." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SettingsPage,
