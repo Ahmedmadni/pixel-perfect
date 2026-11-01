@@ -16,4 +16,5 @@
 - [ ] Phase 3c: reliability and maintenance analytics
 - [x] Link symptoms to vehicle maintenance/diagnostic history and dashboard due-repair alerts (19 rule tests passed; signed-in page checked, account has no vehicles/history for populated end-to-end verification)
 
-- [ ] Comprehensive per-vehicle maintenance report: service history, OBD-II, parts and costs
+- [x] Comprehensive per-vehicle maintenance report: service history, OBD-II, parts and costs (11 tests passed; signed-in empty state verified)
+- [ ] Verify populated comprehensive report end-to-end — blocked: requesting account has no vehicles or service history
