@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
 import { QueryErrorState, EmptyState } from "@/components/common/states";
 import { MaintenanceReportWorkspace } from "@/features/reports/components/MaintenanceReportWorkspace";
@@ -19,4 +19,4 @@ export const Route = createFileRoute("/_authenticated/reports_/maintenance")({
   component: ReportPage,
 });
 function ReportPage() { const { vehicleId } = Route.useSearch(); return <AppShell title="تقرير الصيانة الشامل"><MaintenanceReportWorkspace vehicleId={vehicleId} /></AppShell>; }
-function ReportError({error}:{error:Error}) { const router = useRouter(); return <AppShell title="تقرير الصيانة الشامل"><QueryErrorState error={error} onRetry={() => { void router.invalidate(); }} /></AppShell>; }
+function ReportError({error}:ErrorComponentProps) { const router = useRouter(); return <AppShell title="تقرير الصيانة الشامل"><QueryErrorState error={error} onRetry={() => { void router.invalidate(); }} /></AppShell>; }
