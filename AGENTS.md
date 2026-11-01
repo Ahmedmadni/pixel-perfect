@@ -5,3 +5,4 @@
 - Prepared SQL lives in `database/migrations/` until Cloud is enabled. Why: supabase/migrations is tool-managed.
 - The OBD-II code library is a shared read-only table (`obd_fault_codes`) refreshed by `scripts/import-obd-codes.mjs` via upsert on `code`. Why: reference data is global, not per-user, and the import must stay idempotent.
 - Symptom history links and due-repair alerts share the pure vehicle-scoped history-links rule; text matches are suggestions, and resolved issues never drive due-repair alerts. Why: the symptoms page and dashboard must agree without treating catalog symptoms as actual faults.
+- Comprehensive maintenance reports load through a report feature service and share vehicle-scoped pure calculations; linked installations are displayed separately and excluded from the service-plus-independent-parts total with an explicit inclusion assumption. Why: synchronized expenses and associated parts must not silently duplicate service costs.

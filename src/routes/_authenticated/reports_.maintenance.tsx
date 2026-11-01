@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/AppShell";
 import { QueryErrorState, EmptyState } from "@/components/common/states";
 import { MaintenanceReportWorkspace } from "@/features/reports/components/MaintenanceReportWorkspace";
@@ -14,8 +14,9 @@ export const Route = createFileRoute("/_authenticated/reports_/maintenance")({
     { property: "og:description", content: "سجلات الصيانة والأعطال وقطع الغيار وتكلفة الصيانة لكل سيارة." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
-  errorComponent: ({ error }) => <AppShell title="تقرير الصيانة الشامل"><QueryErrorState error={error} onRetry={() => { void Route.router?.invalidate(); }} /></AppShell>,
+  errorComponent: ReportError,
   notFoundComponent: () => <EmptyState title="التقرير غير موجود" />,
   component: ReportPage,
 });
 function ReportPage() { const { vehicleId } = Route.useSearch(); return <AppShell title="تقرير الصيانة الشامل"><MaintenanceReportWorkspace vehicleId={vehicleId} /></AppShell>; }
+function ReportError({error}:{error:Error}) { const router = useRouter(); return <AppShell title="تقرير الصيانة الشامل"><QueryErrorState error={error} onRetry={() => { void router.invalidate(); }} /></AppShell>; }
