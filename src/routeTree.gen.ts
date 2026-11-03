@@ -20,6 +20,7 @@ import { Route as AuthenticatedRemindersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSymptomsRouteImport } from './routes/_authenticated/symptoms'
+import { Route as AuthenticatedReportsFaultCodesRouteImport } from './routes/_authenticated/reports_.fault-codes'
 import { Route as AuthenticatedReportsMaintenanceRouteImport } from './routes/_authenticated/reports_.maintenance'
 import { Route as AuthenticatedVehiclesIndexRouteImport } from './routes/_authenticated/vehicles.index'
 import { Route as AuthenticatedVehiclesNewRouteImport } from './routes/_authenticated/vehicles.new'
@@ -82,6 +83,12 @@ const AuthenticatedSymptomsRoute = AuthenticatedSymptomsRouteImport.update({
   path: '/symptoms',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedReportsFaultCodesRoute =
+  AuthenticatedReportsFaultCodesRouteImport.update({
+    id: '/reports_/fault-codes',
+    path: '/reports/fault-codes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedReportsMaintenanceRoute =
   AuthenticatedReportsMaintenanceRouteImport.update({
     id: '/reports_/maintenance',
@@ -124,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/symptoms': typeof AuthenticatedSymptomsRoute
+  '/reports/fault-codes': typeof AuthenticatedReportsFaultCodesRoute
   '/reports/maintenance': typeof AuthenticatedReportsMaintenanceRoute
   '/vehicles/new': typeof AuthenticatedVehiclesNewRoute
   '/vehicles/': typeof AuthenticatedVehiclesIndexRoute
@@ -141,6 +149,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/symptoms': typeof AuthenticatedSymptomsRoute
   '/': typeof AuthenticatedIndexRoute
+  '/reports/fault-codes': typeof AuthenticatedReportsFaultCodesRoute
   '/reports/maintenance': typeof AuthenticatedReportsMaintenanceRoute
   '/vehicles/new': typeof AuthenticatedVehiclesNewRoute
   '/vehicles': typeof AuthenticatedVehiclesIndexRoute
@@ -160,6 +169,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/symptoms': typeof AuthenticatedSymptomsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/reports_/fault-codes': typeof AuthenticatedReportsFaultCodesRoute
   '/_authenticated/reports_/maintenance': typeof AuthenticatedReportsMaintenanceRoute
   '/_authenticated/vehicles/new': typeof AuthenticatedVehiclesNewRoute
   '/_authenticated/vehicles/': typeof AuthenticatedVehiclesIndexRoute
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/symptoms'
+    | '/reports/fault-codes'
     | '/reports/maintenance'
     | '/vehicles/new'
     | '/vehicles/'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/symptoms'
     | '/'
+    | '/reports/fault-codes'
     | '/reports/maintenance'
     | '/vehicles/new'
     | '/vehicles'
@@ -214,6 +226,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/symptoms'
     | '/_authenticated/'
+    | '/_authenticated/reports_/fault-codes'
     | '/_authenticated/reports_/maintenance'
     | '/_authenticated/vehicles/new'
     | '/_authenticated/vehicles/'
@@ -305,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSymptomsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reports_/fault-codes': {
+      id: '/_authenticated/reports_/fault-codes'
+      path: '/reports/fault-codes'
+      fullPath: '/reports/fault-codes'
+      preLoaderRoute: typeof AuthenticatedReportsFaultCodesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/reports_/maintenance': {
       id: '/_authenticated/reports_/maintenance'
       path: '/reports/maintenance'
@@ -353,6 +373,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedSymptomsRoute: typeof AuthenticatedSymptomsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedReportsFaultCodesRoute: typeof AuthenticatedReportsFaultCodesRoute
   AuthenticatedReportsMaintenanceRoute: typeof AuthenticatedReportsMaintenanceRoute
   AuthenticatedVehiclesNewRoute: typeof AuthenticatedVehiclesNewRoute
   AuthenticatedVehiclesIndexRoute: typeof AuthenticatedVehiclesIndexRoute
@@ -370,6 +391,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSymptomsRoute: AuthenticatedSymptomsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedReportsFaultCodesRoute: AuthenticatedReportsFaultCodesRoute,
   AuthenticatedReportsMaintenanceRoute: AuthenticatedReportsMaintenanceRoute,
   AuthenticatedVehiclesNewRoute: AuthenticatedVehiclesNewRoute,
   AuthenticatedVehiclesIndexRoute: AuthenticatedVehiclesIndexRoute,
