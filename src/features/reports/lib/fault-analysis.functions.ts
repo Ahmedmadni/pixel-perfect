@@ -7,7 +7,7 @@ export interface FaultAnalysis {
   overall_risk: "low" | "medium" | "high" | "critical";
   patterns: { title: string; codes: string[]; explanation: string }[];
   root_causes: { cause: string; likelihood: "high" | "medium" | "low"; related_codes: string[] }[];
-  recommendations: { action: string; priority: "now" | "soon" | "later"; details: string }[];
+  recommendations: { action: string; priority: "now" | "soon" | "later"; details: string; related_codes?: string[] | undefined }[];
   disclaimer: string;
 }
 
@@ -31,8 +31,8 @@ export const analyzeVehicleFaults = createServerFn({ method: "POST" })
 
     const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("خدمة الذكاء الاصطناعي غير مهيأة.");
-    const instructions = `أنت خبير تشخيص أعطال سيارات. حلّل أكواد OBD-II وسجل الأعطال والصيانة لهذه السيارة واكتشف الأنماط المتكررة والأسباب الجذرية المشتركة. اكتب بالعربية ولا تخترع بيانات غير موجودة. أعد JSON فقط بهذا الشكل:
-{"summary":string,"overall_risk":"low"|"medium"|"high"|"critical","patterns":[{"title":string,"codes":[string],"explanation":string}],"root_causes":[{"cause":string,"likelihood":"high"|"medium"|"low","related_codes":[string]}],"recommendations":[{"action":string,"priority":"now"|"soon"|"later","details":string}],"disclaimer":string}`;
+    const instructions = `أنت خبير تشخيص أعطال سيارات. حلّل أكواد OBD-II وسجل الأعطال والصيانة لهذه السيارة واكتشف الأنماط المتكررة والأسباب الجذرية المشتركة. اكتب بالعربية ولا تخترع بيانات غير موجودة. اذكر في related_codes لكل توصية أكواد OBD-II التي تعالجها. أعد JSON فقط بهذا الشكل:
+{"summary":string,"overall_risk":"low"|"medium"|"high"|"critical","patterns":[{"title":string,"codes":[string],"explanation":string}],"root_causes":[{"cause":string,"likelihood":"high"|"medium"|"low","related_codes":[string]}],"recommendations":[{"action":string,"priority":"now"|"soon"|"later","details":string,"related_codes":[string]}],"disclaimer":string}`;
     const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}`, "X-Lovable-AIG-SDK": "fetch" },
