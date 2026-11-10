@@ -9,6 +9,9 @@ import { OBD_CATEGORY_LABELS, type ObdCategory } from "@/features/diagnostics/se
 import { formatDate } from "@/lib/format";
 import { maintenanceReportQuery } from "../services/maintenance-report.service";
 import { buildFaultCodeReport } from "../lib/fault-code-report";
+import { CodePartsCell } from "./CodePartsCell";
+import { useObdCodePartLinks } from "../hooks/useObdCodePartLinks";
+import { partsByCode, attachParts } from "../lib/code-part-recommendations";
 import { analyzeVehicleFaults, type FaultAnalysis } from "../lib/fault-analysis.functions";
 
 const RISK: Record<FaultAnalysis["overall_risk"], string> = { low: "منخفض", medium: "متوسط", high: "مرتفع", critical: "حرج" };
@@ -18,6 +21,7 @@ const PRIO = { now: "فوراً", soon: "قريباً", later: "لاحقاً" } 
 export function FaultCodeReportWorkspace({ vehicleId }: { vehicleId?: string | undefined }) {
   const { data } = useSuspenseQuery(maintenanceReportQuery);
   const navigate = useNavigate();
+  const links = useObdCodePartLinks();
   const analyze = useServerFn(analyzeVehicleFaults);
   const [ai, setAi] = useState<{ id: string; result: FaultAnalysis } | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,8 +29,11 @@ export function FaultCodeReportWorkspace({ vehicleId }: { vehicleId?: string | u
   const vehicle = data.vehicles.find(v => v.id === vehicleId) ?? data.vehicles.find(v => v.is_active) ?? data.vehicles[0];
   if (!vehicle) return <EmptyState icon={Cpu} title="لا توجد سيارة لإعداد التقرير" description="أضف سيارتك لعرض أكواد أعطالها." action={<Button asChild><Link to="/vehicles/new">إضافة سيارة</Link></Button>} />;
   const rows = buildFaultCodeReport(vehicle.id, data.issues, data.codes);
+  const vehicleParts = data.parts.filter(p => p.fitments.some(f => f.vehicle_id === vehicle.id));
+  const partMap = partsByCode(vehicle.id, links.data ?? [], data.parts.map(p => ({ id: p.id, name: p.name_ar, partNumber: p.part_number, vehicleIds: p.fitments.map(f => f.vehicle_id) })));
   const issueCount = data.issues.filter(i => i.vehicle_id === vehicle.id).length;
   const analysis = ai?.id === vehicle.id ? ai.result : null;
+  const withParts = analysis ? attachParts(analysis.recommendations, partMap, rows.filter(r => r.activeOccurrences > 0).map(r => r.code)) : null;
 
   async function run() {
     setLoading(true); setError(null);
@@ -56,7 +63,7 @@ export function FaultCodeReportWorkspace({ vehicleId }: { vehicleId?: string | u
       {rows.length === 0 ? <EmptyState icon={Cpu} title="لا توجد أكواد مسجلة" description="سجّل عطلاً مع كوده من صفحة الأعطال ليظهر هنا." /> :
       <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full text-sm">
-          <thead className="bg-muted text-right"><tr><th className="p-2">الكود</th><th className="p-2">الوصف</th><th className="p-2">الفئة</th><th className="p-2">التكرار</th><th className="p-2">الحالة</th><th className="p-2">أول/آخر ظهور</th></tr></thead>
+          <thead className="bg-muted text-right"><tr><th className="p-2">الكود</th><th className="p-2">الوصف</th><th className="p-2">الفئة</th><th className="p-2">التكرار</th><th className="p-2">الحالة</th><th className="p-2">أول/آخر ظهور</th><th className="p-2">قطع الغيار المناسبة</th></tr></thead>
           <tbody>{rows.map(r => <tr key={r.code} className="border-t border-border align-top">
             <td className="p-2 font-mono font-semibold" dir="ltr">{r.code}</td>
             <td className="p-2" dir="ltr">{r.description ?? "غير موجود في المكتبة"}<div className="mt-1 text-xs text-ink-soft" dir="rtl">{r.issueTitles.join("، ")}</div></td>
@@ -64,6 +71,7 @@ export function FaultCodeReportWorkspace({ vehicleId }: { vehicleId?: string | u
             <td className="p-2">{r.occurrences}</td>
             <td className="p-2">{r.activeOccurrences > 0 ? <span className="text-accent">نشط ({r.activeOccurrences})</span> : "محلول"}</td>
             <td className="p-2 whitespace-nowrap">{formatDate(r.firstSeen)}<br />{formatDate(r.lastSeen)}</td>
+            <td className="p-2"><CodePartsCell code={r.code} links={(links.data ?? []).filter(l => l.code === r.code)} parts={vehicleParts} /></td>
           </tr>)}</tbody>
         </table>
       </div>}
@@ -81,7 +89,8 @@ export function FaultCodeReportWorkspace({ vehicleId }: { vehicleId?: string | u
         <p>مستوى الخطورة العام: <strong>{RISK[analysis.overall_risk] ?? analysis.overall_risk}</strong></p>
         {analysis.patterns.length > 0 && <div><h4 className="mb-2 font-semibold">الأنماط المتكررة</h4><ul className="space-y-2">{analysis.patterns.map((p, i) => <li key={i}><strong>{p.title}</strong> <span className="font-mono" dir="ltr">{p.codes.join(", ")}</span><p className="text-ink-soft">{p.explanation}</p></li>)}</ul></div>}
         {analysis.root_causes.length > 0 && <div><h4 className="mb-2 font-semibold">الأسباب الجذرية المحتملة</h4><ul className="space-y-1">{analysis.root_causes.map((c, i) => <li key={i}>• {c.cause} — {LIKE[c.likelihood] ?? c.likelihood} <span className="font-mono text-xs" dir="ltr">{c.related_codes.join(", ")}</span></li>)}</ul></div>}
-        {analysis.recommendations.length > 0 && <div><h4 className="mb-2 font-semibold">التوصيات</h4><ol className="space-y-2">{analysis.recommendations.map((r, i) => <li key={i}><strong>{r.action}</strong> ({PRIO[r.priority] ?? r.priority})<p className="text-ink-soft">{r.details}</p></li>)}</ol></div>}
+        {withParts && withParts.recommendations.length > 0 && <div><h4 className="mb-2 font-semibold">التوصيات</h4><ol className="space-y-2">{withParts.recommendations.map((r, i) => <li key={i}><strong>{r.action}</strong> ({PRIO[r.priority] ?? r.priority})<p className="text-ink-soft">{r.details}</p>{r.parts.length > 0 && <p className="mt-1 text-brand-deep">قطع مقترحة من قاعدتك: {r.parts.map(p => p.name + (p.partNumber ? ` (${p.partNumber})` : "")).join("، ")}</p>}</li>)}</ol></div>}
+        {withParts && withParts.leftovers.length > 0 && <div><h4 className="mb-2 font-semibold">قطع غيار مرتبطة بالأكواد النشطة</h4><ul className="space-y-1">{withParts.leftovers.map(l => <li key={l.part.id}>• {l.part.name} <span className="font-mono text-xs" dir="ltr">{l.code}</span></li>)}</ul></div>}
         <p className="text-xs text-ink-soft">{analysis.disclaimer}</p>
       </div>}
     </section>
