@@ -430,6 +430,45 @@ export type Database = {
           },
         ]
       }
+      obd_code_parts: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          part_id: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          part_id: string
+          user_id?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          part_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "obd_code_parts_code_fkey"
+            columns: ["code"]
+            isOneToOne: false
+            referencedRelation: "obd_fault_codes"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "obd_code_parts_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "parts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       obd_fault_codes: {
         Row: {
           category: string
