@@ -15,6 +15,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedDiagnosticsRouteImport } from './routes/_authenticated/diagnostics'
 import { Route as AuthenticatedExpensesRouteImport } from './routes/_authenticated/expenses'
 import { Route as AuthenticatedMaintenanceRouteImport } from './routes/_authenticated/maintenance'
+import { Route as AuthenticatedObdCodesRouteImport } from './routes/_authenticated/obd-codes'
 import { Route as AuthenticatedPartsRouteImport } from './routes/_authenticated/parts'
 import { Route as AuthenticatedRemindersRouteImport } from './routes/_authenticated/reminders'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
@@ -58,6 +59,11 @@ const AuthenticatedMaintenanceRoute =
     path: '/maintenance',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedObdCodesRoute = AuthenticatedObdCodesRouteImport.update({
+  id: '/obd-codes',
+  path: '/obd-codes',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPartsRoute = AuthenticatedPartsRouteImport.update({
   id: '/parts',
   path: '/parts',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/diagnostics': typeof AuthenticatedDiagnosticsRoute
   '/expenses': typeof AuthenticatedExpensesRoute
   '/maintenance': typeof AuthenticatedMaintenanceRoute
+  '/obd-codes': typeof AuthenticatedObdCodesRoute
   '/parts': typeof AuthenticatedPartsRoute
   '/reminders': typeof AuthenticatedRemindersRoute
   '/reports': typeof AuthenticatedReportsRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/diagnostics': typeof AuthenticatedDiagnosticsRoute
   '/expenses': typeof AuthenticatedExpensesRoute
   '/maintenance': typeof AuthenticatedMaintenanceRoute
+  '/obd-codes': typeof AuthenticatedObdCodesRoute
   '/parts': typeof AuthenticatedPartsRoute
   '/reminders': typeof AuthenticatedRemindersRoute
   '/reports': typeof AuthenticatedReportsRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_authenticated/diagnostics': typeof AuthenticatedDiagnosticsRoute
   '/_authenticated/expenses': typeof AuthenticatedExpensesRoute
   '/_authenticated/maintenance': typeof AuthenticatedMaintenanceRoute
+  '/_authenticated/obd-codes': typeof AuthenticatedObdCodesRoute
   '/_authenticated/parts': typeof AuthenticatedPartsRoute
   '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/diagnostics'
     | '/expenses'
     | '/maintenance'
+    | '/obd-codes'
     | '/parts'
     | '/reminders'
     | '/reports'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/diagnostics'
     | '/expenses'
     | '/maintenance'
+    | '/obd-codes'
     | '/parts'
     | '/reminders'
     | '/reports'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/_authenticated/diagnostics'
     | '/_authenticated/expenses'
     | '/_authenticated/maintenance'
+    | '/_authenticated/obd-codes'
     | '/_authenticated/parts'
     | '/_authenticated/reminders'
     | '/_authenticated/reports'
@@ -281,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/maintenance'
       fullPath: '/maintenance'
       preLoaderRoute: typeof AuthenticatedMaintenanceRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/obd-codes': {
+      id: '/_authenticated/obd-codes'
+      path: '/obd-codes'
+      fullPath: '/obd-codes'
+      preLoaderRoute: typeof AuthenticatedObdCodesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/parts': {
@@ -367,6 +386,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDiagnosticsRoute: typeof AuthenticatedDiagnosticsRoute
   AuthenticatedExpensesRoute: typeof AuthenticatedExpensesRoute
   AuthenticatedMaintenanceRoute: typeof AuthenticatedMaintenanceRoute
+  AuthenticatedObdCodesRoute: typeof AuthenticatedObdCodesRoute
   AuthenticatedPartsRoute: typeof AuthenticatedPartsRoute
   AuthenticatedRemindersRoute: typeof AuthenticatedRemindersRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
@@ -385,6 +405,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDiagnosticsRoute: AuthenticatedDiagnosticsRoute,
   AuthenticatedExpensesRoute: AuthenticatedExpensesRoute,
   AuthenticatedMaintenanceRoute: AuthenticatedMaintenanceRoute,
+  AuthenticatedObdCodesRoute: AuthenticatedObdCodesRoute,
   AuthenticatedPartsRoute: AuthenticatedPartsRoute,
   AuthenticatedRemindersRoute: AuthenticatedRemindersRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,

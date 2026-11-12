@@ -1,3 +1,4 @@
+import { mergeObdCodes } from "@/features/diagnostics/lib/obd-merge";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -27,7 +28,9 @@ export const analyzeVehicleFaults = createServerFn({ method: "POST" })
     const issues = (d.data ?? []) as { obd_codes: string[] }[];
     if (!issues.length) throw new Error("لا توجد أعطال مسجلة لهذه السيارة لتحليلها.");
     const codes = [...new Set(issues.flatMap(i => i.obd_codes ?? []))];
-    const lib = codes.length ? (await sb.from("obd_fault_codes").select("code,description,category").in("code", codes)).data ?? [] : [];
+    const stdLib = codes.length ? (await sb.from("obd_fault_codes").select("code,description,category").in("code", codes)).data ?? [] : [];
+    const ownLib = codes.length ? (await sb.from("user_obd_codes").select("code,description,category").in("code", codes)).data ?? [] : [];
+    const lib = mergeObdCodes(stdLib, ownLib);
 
     const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("خدمة الذكاء الاصطناعي غير مهيأة.");
