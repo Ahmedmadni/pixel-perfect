@@ -866,6 +866,39 @@ export type Database = {
           },
         ]
       }
+      user_obd_codes: {
+        Row: {
+          category: string
+          code: string
+          created_at: string
+          description: string
+          id: string
+          notes: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          code: string
+          created_at?: string
+          description: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          category?: string
+          code?: string
+          created_at?: string
+          description?: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       vehicle_maintenance_schedules: {
         Row: {
           created_at: string

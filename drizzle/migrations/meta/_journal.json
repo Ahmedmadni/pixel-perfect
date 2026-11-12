@@ -15,6 +15,13 @@
       "when": 1794285388525,
       "tag": "0001_obd_code_parts",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794471696493,
+      "tag": "0002_user_obd_codes",
+      "breakpoints": true
     }
   ]
 }
