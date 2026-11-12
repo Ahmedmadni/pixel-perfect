@@ -114,7 +114,20 @@ async function upsert(rows) {
   return saved;
 }
 
-const rows = await collect();
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+const LOCAL_FILE = new URL("../data/obd-codes.json", import.meta.url);
+// Use the bundled standard file; pass --refresh to pull GitHub again and rewrite it.
+let rows;
+if (!process.argv.includes("--refresh") && existsSync(LOCAL_FILE)) {
+  rows = JSON.parse(readFileSync(LOCAL_FILE, "utf8"));
+  console.log(`Loaded ${rows.length} codes from data/obd-codes.json`);
+} else {
+  rows = await collect();
+  mkdirSync(new URL("../data/", import.meta.url), { recursive: true });
+  writeFileSync(LOCAL_FILE, JSON.stringify(rows));
+  console.log(`Wrote data/obd-codes.json`);
+}
+if (process.argv.includes("--file-only")) process.exit(0);
 console.log(`\nMerged ${rows.length} unique fault codes. Saving...`);
 const saved = await upsert(rows);
 console.log(`Done: ${saved}/${rows.length} codes stored.`);

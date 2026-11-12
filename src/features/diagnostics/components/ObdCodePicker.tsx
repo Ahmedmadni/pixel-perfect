@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Loader2, Plus, Search, X } from "lucide-react";
 import { useObdCodeLookup, useObdCodeSearch } from "../hooks/useObdCodes";
-import { normalizeObdCode, OBD_CATEGORY_LABELS, OBD_CODE_PATTERN, type ObdCategory } from "../services/obd-codes.service";
+import { normalizeObdCode, OBD_CATEGORY_LABELS, categoryLabel, OBD_CODE_PATTERN, type ObdCategory } from "../services/obd-codes.service";
 
 const inputClass =
   "mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand/30";
@@ -86,7 +86,7 @@ export function ObdCodePicker({ codes, onChange }: { codes: string[]; onChange: 
                     </span>
                     <span className="min-w-0">
                       <span className="block">{row.description}</span>
-                      <span className="block text-xs text-ink-soft">{OBD_CATEGORY_LABELS[row.category]}</span>
+                      <span className="block text-xs text-ink-soft">{categoryLabel(row.category)}</span>
                     </span>
                   </button>
                 </li>
