@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Enrich fault reports with sourced generic causes for P0171, P0300–P0308, P0135, P0420 and P0128, vehicle-scoped catalog suggestions, and shared AI context (10 tests; populated account report and AI analysis verified on desktop/mobile). Unsupported codes explicitly require a manufacturer reference.
 - [x] Service layer + DATA_PROVIDER_NOT_CONNECTED
 - [x] Vehicles routes: list, new, detail (tabs), edit
 - [x] Odometer rules + history UI
